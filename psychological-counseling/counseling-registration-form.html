@@ -1,0 +1,924 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>南开大学心理咨询登记表</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', 'Microsoft YaHei', sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #f0f4f8 0%, #e3eaf3 100%);
+            color: #333;
+            line-height: 1.6;
+            padding: 20px;
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 15px 50px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+        
+        header {
+            background: linear-gradient(to right, #1a3a8f, #2c5cc5);
+            color: white;
+            padding: 30px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        header::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"><path fill="%23ffffff" fill-opacity="0.1" d="M0,128L48,122.7C96,117,192,107,288,112C384,117,480,139,576,138.7C672,139,768,117,864,117.3C960,117,1056,139,1152,149.3C1248,160,1344,160,1392,160L1440,160L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"></path></svg>');
+            background-size: cover;
+            background-position: center;
+        }
+        
+        h1 {
+            font-size: 2.3rem;
+            margin-bottom: 10px;
+            position: relative;
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.2);
+        }
+        
+        .subtitle {
+            font-size: 1.1rem;
+            max-width: 700px;
+            margin: 0 auto;
+            opacity: 0.9;
+            position: relative;
+        }
+        
+        .privacy-notice {
+            background: #f8fafc;
+            border-top: 2px solid #e0e6ef;
+            border-bottom: 2px solid #e0e6ef;
+            padding: 15px;
+            text-align: center;
+            font-weight: 500;
+            color: #1a3a8f;
+        }
+        
+        .form-container {
+            padding: 30px;
+        }
+        
+        .form-section {
+            margin-bottom: 30px;
+            padding: 25px;
+            background: #f8fafc;
+            border-radius: 12px;
+            border: 1px solid #e0e6ef;
+        }
+        
+        .section-title {
+            display: flex;
+            align-items: center;
+            color: #1a3a8f;
+            font-size: 1.3rem;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #e0e6ef;
+        }
+        
+        .section-title i {
+            margin-right: 12px;
+            background: #eef2f9;
+            padding: 10px;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .form-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        label {
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #2c3e50;
+            display: flex;
+            align-items: center;
+        }
+        
+        label i {
+            margin-right: 8px;
+            color: #2c5cc5;
+        }
+        
+        input, select, textarea {
+            padding: 12px 15px;
+            border: 1px solid #d1d9e6;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            background: white;
+        }
+        
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: #2c5cc5;
+            box-shadow: 0 0 0 3px rgba(44, 92, 197, 0.2);
+        }
+        
+        textarea {
+            min-height: 120px;
+            resize: vertical;
+        }
+        
+        .checkbox-group {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 10px;
+        }
+        
+        .checkbox-item {
+            display: flex;
+            align-items: center;
+        }
+        
+        .checkbox-item input[type="checkbox"],
+        .checkbox-item input[type="radio"] {
+            width: 20px;
+            height: 20px;
+            margin-right: 8px;
+            accent-color: #2c5cc5;
+        }
+        
+        .checkbox-item label {
+            font-weight: normal;
+        }
+        
+        .inline-input {
+            display: flex;
+            align-items: center;
+            margin-top: 5px;
+        }
+        
+        .inline-input input {
+            width: 60px;
+            margin-left: 10px;
+            margin-right: 5px;
+        }
+        
+        .nested-option {
+            margin-left: 30px;
+            margin-top: 10px;
+        }
+        
+        .parent-info {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+            margin-top: 15px;
+        }
+        
+        .parent-card {
+            background: white;
+            border-radius: 8px;
+            padding: 15px;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);
+        }
+        
+        .parent-card h4 {
+            text-align: center;
+            margin-bottom: 15px;
+            color: #1a3a8f;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #e0e6ef;
+        }
+        
+        .form-actions {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin: 40px 0 20px;
+            flex-wrap: wrap;
+        }
+        
+        .btn {
+            padding: 14px 35px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 220px;
+        }
+        
+        .btn-submit {
+            background: linear-gradient(to right, #1a3a8f, #2c5cc5);
+            color: white;
+            box-shadow: 0 4px 15px rgba(26, 58, 143, 0.3);
+        }
+        
+        .btn-reset {
+            background: #f1f5f9;
+            color: #1a3a8f;
+            border: 1px solid #d1d9e6;
+        }
+        
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 7px 20px rgba(0, 0, 0, 0.15);
+        }
+        
+        .btn:active {
+            transform: translateY(0);
+        }
+        
+        .btn i {
+            margin-right: 10px;
+        }
+        
+        footer {
+            text-align: center;
+            padding: 30px;
+            color: #64748b;
+            background: #f8fafc;
+            border-top: 1px solid #e0e6ef;
+        }
+        
+        .icon-container {
+            display: flex;
+            justify-content: center;
+            margin: 25px 0;
+        }
+        
+        .icon-wrapper {
+            background: #eef2f9;
+            border-radius: 50%;
+            width: 100px;
+            height: 100px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 15px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+        }
+        
+        .icon-wrapper i {
+            font-size: 2.5rem;
+            color: #2c5cc5;
+        }
+        
+        @media (max-width: 768px) {
+            .form-container {
+                padding: 15px;
+            }
+            
+            .form-section {
+                padding: 15px;
+            }
+            
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+            
+            .parent-info {
+                grid-template-columns: 1fr;
+            }
+            
+            .btn {
+                width: 100%;
+                margin-bottom: 15px;
+            }
+            
+            h1 {
+                font-size: 1.8rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1><i class="fas fa-user-graduate"></i> 南开大学心理咨询登记表</h1>
+            <p class="subtitle">本表格内容严格保密，信息仅用于咨询师了解你的情况，请放心填写</p>
+        </header>
+        
+        <div class="privacy-notice">
+            <i class="fas fa-lock"></i> 您的所有信息将受到严格保密，仅用于提供更好的心理咨询服务
+        </div>
+        
+        <div class="form-container">
+            <form id="registration-form">
+                <!-- 基本信息部分 -->
+                <div class="form-section">
+                    <div class="section-title">
+                        <i class="fas fa-id-card"></i>
+                        <h2>基本信息</h2>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="name"><i class="fas fa-signature"></i> 姓名</label>
+                            <input type="text" id="name" name="name" placeholder="请输入您的姓名" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="gender"><i class="fas fa-venus-mars"></i> 性别</label>
+                            <select id="gender" name="gender" required>
+                                <option value="">请选择性别</option>
+                                <option value="male">男</option>
+                                <option value="female">女</option>
+                                <option value="other">其他</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="birthdate"><i class="fas fa-birthday-cake"></i> 出生日期</label>
+                            <input type="date" id="birthdate" name="birthdate" required>
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="ethnicity"><i class="fas fa-globe-asia"></i> 民族</label>
+                            <input type="text" id="ethnicity" name="ethnicity" placeholder="请输入您的民族">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="hometown"><i class="fas fa-home"></i> 家庭所在地</label>
+                            <input type="text" id="hometown" name="hometown" placeholder="省/市/区">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="phone"><i class="fas fa-phone"></i> 联系电话</label>
+                            <input type="tel" id="phone" name="phone" placeholder="请输入您的手机号码" required>
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="department"><i class="fas fa-university"></i> 院系</label>
+                            <input type="text" id="department" name="department" placeholder="请输入您所在的院系" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="grade"><i class="fas fa-graduation-cap"></i> 年级</label>
+                            <select id="grade" name="grade" required>
+                                <option value="">请选择年级</option>
+                                <option value="freshman">大一</option>
+                                <option value="sophomore">大二</option>
+                                <option value="junior">大三</option>
+                                <option value="senior">大四</option>
+                                <option value="graduate">研究生</option>
+                                <option value="phd">博士生</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="student-id"><i class="fas fa-id-badge"></i> 学号</label>
+                            <input type="text" id="student-id" name="student_id" placeholder="请输入您的学号" required>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 家庭信息部分 -->
+                <div class="form-section">
+                    <div class="section-title">
+                        <i class="fas fa-users"></i>
+                        <h2>家庭信息</h2>
+                    </div>
+                    
+                    <div class="parent-info">
+                        <div class="parent-card">
+                            <h4><i class="fas fa-male"></i> 父亲信息</h4>
+                            <div class="form-group">
+                                <label>年龄</label>
+                                <input type="number" name="father_age" placeholder="父亲年龄">
+                            </div>
+                            <div class="form-group">
+                                <label>职业</label>
+                                <input type="text" name="father_occupation" placeholder="父亲职业">
+                            </div>
+                            <div class="form-group">
+                                <label>学历</label>
+                                <input type="text" name="father_education" placeholder="父亲学历">
+                            </div>
+                        </div>
+                        
+                        <div class="parent-card">
+                            <h4><i class="fas fa-female"></i> 母亲信息</h4>
+                            <div class="form-group">
+                                <label>年龄</label>
+                                <input type="number" name="mother_age" placeholder="母亲年龄">
+                            </div>
+                            <div class="form-group">
+                                <label>职业</label>
+                                <input type="text" name="mother_occupation" placeholder="母亲职业">
+                            </div>
+                            <div class="form-group">
+                                <label>学历</label>
+                                <input type="text" name="mother_education" placeholder="母亲学历">
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label><i class="fas fa-heart"></i> 父母婚姻状况</label>
+                            <div class="checkbox-group">
+                                <div class="checkbox-item">
+                                    <input type="radio" id="marriage-good" name="marriage_status" value="good">
+                                    <label for="marriage-good">良好</label>
+                                </div>
+                                <div class="checkbox-item">
+                                    <input type="radio" id="marriage-normal" name="marriage_status" value="normal">
+                                    <label for="marriage-normal">一般</label>
+                                </div>
+                                <div class="checkbox-item">
+                                    <input type="radio" id="marriage-divorce" name="marriage_status" value="divorce">
+                                    <label for="marriage-divorce">离婚</label>
+                                </div>
+                                <div class="checkbox-item">
+                                    <input type="radio" id="marriage-remarry" name="marriage_status" value="remarry">
+                                    <label for="marriage-remarry">再婚</label>
+                                </div>
+                                <div class="checkbox-item">
+                                    <input type="radio" id="marriage-death" name="marriage_status" value="death">
+                                    <label for="marriage-death">丧亲</label>
+                                    <div class="nested-option">
+                                        <div class="checkbox-item">
+                                            <input type="checkbox" id="death-father" name="death_father">
+                                            <label for="death-father">父亲</label>
+                                        </div>
+                                        <div class="checkbox-item">
+                                            <input type="checkbox" id="death-mother" name="death_mother">
+                                            <label for="death-mother">母亲</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label><i class="fas fa-money-bill-wave"></i> 家庭经济状况</label>
+                            <div class="checkbox-group">
+                                <div class="checkbox-item">
+                                    <input type="radio" id="economy-rich" name="economy_status" value="rich">
+                                    <label for="economy-rich">富裕</label>
+                                </div>
+                                <div class="checkbox-item">
+                                    <input type="radio" id="economy-normal" name="economy_status" value="normal">
+                                    <label for="economy-normal">一般</label>
+                                </div>
+                                <div class="checkbox-item">
+                                    <input type="radio" id="economy-poor" name="economy_status" value="poor">
+                                    <label for="economy-poor">贫困</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label><i class="fas fa-child"></i> 是否独生子女</label>
+                            <div class="checkbox-group">
+                                <div class="checkbox-item">
+                                    <input type="radio" id="only-child-yes" name="only_child" value="yes">
+                                    <label for="only-child-yes">是</label>
+                                </div>
+                                <div class="checkbox-item">
+                                    <input type="radio" id="only-child-no" name="only_child" value="no">
+                                    <label for="only-child-no">否</label>
+                                    <div class="inline-input">
+                                        <span>兄</span>
+                                        <input type="number" name="brothers" min="0" value="0">
+                                        <span>人、弟</span>
+                                        <input type="number" name="younger_brothers" min="0" value="0">
+                                        <span>人、姐</span>
+                                        <input type="number" name="sisters" min="0" value="0">
+                                        <span>人、妹</span>
+                                        <input type="number" name="younger_sisters" min="0" value="0">
+                                        <span>人</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label><i class="fas fa-home-heart"></i> 有无寄养经历</label>
+                            <div class="checkbox-group">
+                                <div class="checkbox-item">
+                                    <input type="radio" id="foster-no" name="foster_experience" value="no">
+                                    <label for="foster-no">无</label>
+                                </div>
+                                <div class="checkbox-item">
+                                    <input type="radio" id="foster-yes" name="foster_experience" value="yes">
+                                    <label for="foster-yes">有</label>
+                                    <div class="nested-option">
+                                        <textarea name="foster_details" placeholder="具体说明寄养经历"></textarea>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 学习与社交情况 -->
+                <div class="form-section">
+                    <div class="section-title">
+                        <i class="fas fa-book-reader"></i>
+                        <h2>学习与社交情况</h2>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label><i class="fas fa-chart-line"></i> 近一年来学习成绩变化</label>
+                            <div class="checkbox-group">
+                                <div class="checkbox-item">
+                                    <input type="radio" id="grade-up" name="grade_change" value="up">
+                                    <label for="grade-up">上升</label>
+                                </div>
+                                <div class="checkbox-item">
+                                    <input type="radio" id="grade-stable" name="grade_change" value="stable">
+                                    <label for="grade-stable">稳定</label>
+                                </div>
+                                <div class="checkbox-item">
+                                    <input type="radio" id="grade-down" name="grade_change" value="down">
+                                    <label for="grade-down">下降</label>
+                                </div>
+                                <div class="checkbox-item">
+                                    <input type="radio" id="grade-sharp-down" name="grade_change" value="sharp_down">
+                                    <label for="grade-sharp-down">大幅下降</label>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label><i class="fas fa-user-friends"></i> 交友状况</label>
+                            <div class="checkbox-group">
+                                <div class="inline-input">
+                                    <span>知心朋友</span>
+                                    <input type="number" name="close_friends" min="0" value="0">
+                                    <span>人</span>
+                                </div>
+                                <div class="checkbox-item">
+                                    <span>一般朋友</span>
+                                </div>
+                                <div class="checkbox-item">
+                                    <input type="radio" id="friends-many" name="friends_count" value="many">
+                                    <label for="friends-many">很多</label>
+                                </div>
+                                <div class="checkbox-item">
+                                    <input type="radio" id="friends-normal" name="friends_count" value="normal">
+                                    <label for="friends-normal">一般</label>
+                                </div>
+                                <div class="checkbox-item">
+                                    <input type="radio" id="friends-few" name="friends_count" value="few">
+                                    <label for="friends-few">不多</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 健康状况部分 -->
+                <div class="form-section">
+                    <div class="section-title">
+                        <i class="fas fa-heartbeat"></i>
+                        <h2>健康状况</h2>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label><i class="fas fa-brain"></i> 个人精神类疾病史</label>
+                            <div class="checkbox-group">
+                                <div class="checkbox-item">
+                                    <input type="radio" id="mental-no" name="mental_history" value="no">
+                                    <label for="mental-no">无</label>
+                                </div>
+                                <div class="checkbox-item">
+                                    <input type="radio" id="mental-yes" name="mental_history" value="yes">
+                                    <label for="mental-yes">有</label>
+                                    <div class="nested-option">
+                                        <input type="text" name="mental_institution" placeholder="就诊机构">
+                                        <input type="text" name="mental_diagnosis" placeholder="诊断结果" style="margin-top: 10px;">
+                                        <textarea name="medication" placeholder="服药情况" style="margin-top: 10px;"></textarea>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label><i class="fas fa-exclamation-triangle"></i> 是否曾有自伤或自杀</label>
+                            <div class="checkbox-group">
+                                <div class="checkbox-item">
+                                    <input type="radio" id="selfharm-no" name="selfharm" value="no">
+                                    <label for="selfharm-no">无</label>
+                                </div>
+                                <div class="checkbox-item">
+                                    <input type="radio" id="selfharm-thought" name="selfharm" value="thought">
+                                    <label for="selfharm-thought">自伤或自杀想法</label>
+                                </div>
+                                <div class="checkbox-item">
+                                    <input type="radio" id="selfharm-selfinjury" name="selfharm" value="selfinjury">
+                                    <label for="selfharm-selfinjury">自伤行为</label>
+                                </div>
+                                <div class="checkbox-item">
+                                    <input type="radio" id="selfharm-suicide" name="selfharm" value="suicide">
+                                    <label for="selfharm-suicide">自杀行为</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label><i class="fas fa-dna"></i> 家族精神类疾病史</label>
+                            <div class="checkbox-group">
+                                <div class="checkbox-item">
+                                    <input type="radio" id="family-mental-no" name="family_mental_history" value="no">
+                                    <label for="family-mental-no">无</label>
+                                </div>
+                                <div class="checkbox-item">
+                                    <input type="radio" id="family-mental-yes" name="family_mental_history" value="yes">
+                                    <label for="family-mental-yes">有</label>
+                                    <div class="nested-option">
+                                        <input type="text" name="family_relation" placeholder="亲属关系">
+                                        <input type="text" name="family_diagnosis" placeholder="诊断结果" style="margin-top: 10px;">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label><i class="fas fa-calendar-times"></i> 过往重大负性生活事件</label>
+                            <div class="checkbox-group" style="grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));">
+                                <div class="checkbox-item">
+                                    <input type="checkbox" id="event-sick" name="event[]" value="sick">
+                                    <label for="event-sick">亲友生病</label>
+                                </div>
+                                <div class="checkbox-item">
+                                    <input type="checkbox" id="event-death" name="event[]" value="death">
+                                    <label for="event-death">亲友亡故</label>
+                                </div>
+                                <div class="checkbox-item">
+                                    <input type="checkbox" id="event-unemployment" name="event[]" value="unemployment">
+                                    <label for="event-unemployment">家人失业</label>
+                                </div>
+                                <div class="checkbox-item">
+                                    <input type="checkbox" id="event-lawsuit" name="event[]" value="lawsuit">
+                                    <label for="event-lawsuit">法律诉讼</label>
+                                </div>
+                                <div class="checkbox-item">
+                                    <input type="checkbox" id="event-separation" name="event[]" value="separation">
+                                    <label for="event-separation">父母分居</label>
+                                </div>
+                                <div class="checkbox-item">
+                                    <input type="checkbox" id="event-divorce" name="event[]" value="divorce">
+                                    <label for="event-divorce">父母离异</label>
+                                </div>
+                                <div class="checkbox-item">
+                                    <input type="checkbox" id="event-academic" name="event[]" value="academic">
+                                    <label for="event-academic">学业遇挫</label>
+                                </div>
+                                <div class="checkbox-item">
+                                    <input type="checkbox" id="event-punishment" name="event[]" value="punishment">
+                                    <label for="event-punishment">受到学校处分</label>
+                                </div>
+                                <div class="checkbox-item">
+                                    <input type="checkbox" id="event-breakup" name="event[]" value="breakup">
+                                    <label for="event-breakup">失恋</label>
+                                </div>
+                                <div class="checkbox-item">
+                                    <input type="checkbox" id="event-illness" name="event[]" value="illness">
+                                    <label for="event-illness">生病</label>
+                                </div>
+                                <div class="checkbox-item">
+                                    <input type="checkbox" id="event-other" name="event[]" value="other">
+                                    <label for="event-other">其他</label>
+                                    <input type="text" name="event_other_desc" placeholder="请说明" style="margin-top: 5px;">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 咨询经历部分 -->
+                <div class="form-section">
+                    <div class="section-title">
+                        <i class="fas fa-comments"></i>
+                        <h2>咨询经历</h2>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label><i class="fas fa-history"></i> 既往咨询经历</label>
+                            <div class="checkbox-group">
+                                <div class="checkbox-item">
+                                    <input type="radio" id="past-consult-no" name="past_consultation" value="no">
+                                    <label for="past-consult-no">无</label>
+                                </div>
+                                <div class="checkbox-item">
+                                    <input type="radio" id="past-consult-yes" name="past_consultation" value="yes">
+                                    <label for="past-consult-yes">有</label>
+                                    <div class="nested-option">
+                                        <input type="number" name="consult_count" min="1" placeholder="咨询次数">
+                                        <div style="margin-top: 15px;">
+                                            <label>第1次时间：</label>
+                                            <input type="date" name="first_consult_date">
+                                            <label style="margin-top: 10px;">地点：</label>
+                                            <input type="text" name="first_consult_location" placeholder="咨询地点">
+                                            <label style="margin-top: 10px;">咨询师(本校的填写)：</label>
+                                            <input type="text" name="first_consultant" placeholder="咨询师姓名">
+                                        </div>
+                                        <div style="margin-top: 15px;">
+                                            <label>最后1次时间：</label>
+                                            <input type="date" name="last_consult_date">
+                                            <label style="margin-top: 10px;">地点：</label>
+                                            <input type="text" name="last_consult_location" placeholder="咨询地点">
+                                            <label style="margin-top: 10px;">咨询师(本校的填写)：</label>
+                                            <input type="text" name="last_consultant" placeholder="咨询师姓名">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label><i class="fas fa-calendar-check"></i> 本次预约方式</label>
+                            <div class="checkbox-group">
+                                <div class="checkbox-item">
+                                    <input type="radio" id="appointment-self" name="appointment_method" value="self">
+                                    <label for="appointment-self">自行前来</label>
+                                </div>
+                                <div class="checkbox-item">
+                                    <input type="radio" id="appointment-friend" name="appointment_method" value="friend">
+                                    <label for="appointment-friend">同学建议</label>
+                                </div>
+                                <div class="checkbox-item">
+                                    <input type="radio" id="appointment-teacher" name="appointment_method" value="teacher">
+                                    <label for="appointment-teacher">学院老师建议</label>
+                                </div>
+                                <div class="checkbox-item">
+                                    <input type="radio" id="appointment-parent" name="appointment_method" value="parent">
+                                    <label for="appointment-parent">父母建议</label>
+                                </div>
+                                <div class="checkbox-item">
+                                    <input type="radio" id="appointment-other" name="appointment_method" value="other">
+                                    <label for="appointment-other">其他</label>
+                                    <input type="text" name="appointment_other" placeholder="请说明" style="margin-top: 5px;">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label><i class="fas fa-question-circle"></i> 求助主题</label>
+                            <div class="checkbox-group" style="grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));">
+                                <div class="checkbox-item">
+                                    <input type="checkbox" id="topic-self" name="topic[]" value="self">
+                                    <label for="topic-self">自我探索</label>
+                                </div>
+                                <div class="checkbox-item">
+                                    <input type="checkbox" id="topic-relationship" name="topic[]" value="relationship">
+                                    <label for="topic-relationship">人际关系</label>
+                                </div>
+                                <div class="checkbox-item">
+                                    <input type="checkbox" id="topic-academic" name="topic[]" value="academic">
+                                    <label for="topic-academic">学业问题</label>
+                                </div>
+                                <div class="checkbox-item">
+                                    <input type="checkbox" id="topic-love" name="topic[]" value="love">
+                                    <label for="topic-love">恋爱情感</label>
+                                </div>
+                                <div class="checkbox-item">
+                                    <input type="checkbox" id="topic-family" name="topic[]" value="family">
+                                    <label for="topic-family">亲子家庭</label>
+                                </div>
+                                <div class="checkbox-item">
+                                    <input type="checkbox" id="topic-career" name="topic[]" value="career">
+                                    <label for="topic-career">生涯发展</label>
+                                </div>
+                                <div class="checkbox-item">
+                                    <input type="checkbox" id="topic-emotion" name="topic[]" value="emotion">
+                                    <label for="topic-emotion">情绪困扰</label>
+                                </div>
+                                <div class="checkbox-item">
+                                    <input type="checkbox" id="topic-gender" name="topic[]" value="gender">
+                                    <label for="topic-gender">性别认同</label>
+                                </div>
+                                <div class="checkbox-item">
+                                    <input type="checkbox" id="topic-adaptation" name="topic[]" value="adaptation">
+                                    <label for="topic-adaptation">适应问题</label>
+                                </div>
+                                <div class="checkbox-item">
+                                    <input type="checkbox" id="topic-obsession" name="topic[]" value="obsession">
+                                    <label for="topic-obsession">强迫行为</label>
+                                </div>
+                                <div class="checkbox-item">
+                                    <input type="checkbox" id="topic-crisis" name="topic[]" value="crisis">
+                                    <label for="topic-crisis">突发危机</label>
+                                </div>
+                                <div class="checkbox-item">
+                                    <input type="checkbox" id="topic-health" name="topic[]" value="health">
+                                    <label for="topic-health">身心健康</label>
+                                </div>
+                                <div class="checkbox-item">
+                                    <input type="checkbox" id="topic-other" name="topic[]" value="other">
+                                    <label for="topic-other">其他</label>
+                                    <input type="text" name="topic_other" placeholder="请说明" style="margin-top: 5px;">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label><i class="fas fa-comment-dots"></i> 你来咨询的原因或其他你希望咨询师了解的信息</label>
+                            <textarea name="consult_reason" placeholder="请详细描述您咨询的原因和需要帮助的问题..."></textarea>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="form-actions">
+                    <button type="reset" class="btn btn-reset"><i class="fas fa-redo"></i> 重置表单</button>
+                    <button type="submit" class="btn btn-submit"><i class="fas fa-paper-plane"></i> 提交登记表</button>
+                </div>
+            </form>
+        </div>
+        
+        <footer>
+            <p>南开大学心理健康教育中心 © 2023 | 专业 · 保密 · 尊重</p>
+            <p>地址：天津市南开区卫津路94号 | 电话：022-23505432</p>
+        </footer>
+    </div>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // 设置默认日期为今天
+            const today = new Date();
+            const formattedDate = today.toISOString().split('T')[0];
+            document.getElementById('birthdate').value = formattedDate;
+            
+            // 表单提交处理
+            document.getElementById('registration-form').addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                // 验证必填字段
+                const name = document.getElementById('name').value;
+                const gender = document.getElementById('gender').value;
+                const birthdate = document.getElementById('birthdate').value;
+                const phone = document.getElementById('phone').value;
+                const department = document.getElementById('department').value;
+                const grade = document.getElementById('grade').value;
+                const studentId = document.getElementById('student-id').value;
+                
+                if (!name || !gender || !birthdate || !phone || !department || !grade || !studentId) {
+                    alert('请填写所有必填字段（基本信息部分）');
+                    return;
+                }
+                
+                // 在实际应用中，这里应该发送数据到服务器
+                alert('心理咨询登记表提交成功！我们将尽快与您联系安排咨询。');
+                
+                // 模拟提交成功的UI反馈
+                this.reset();
+                document.getElementById('birthdate').value = formattedDate;
+            });
+        });
+    </script>
+</body>
+</html>
