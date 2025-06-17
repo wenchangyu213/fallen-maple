@@ -264,20 +264,113 @@
         }
         
         .signature-section {
-            display: flex;
-            justify-content: flex-end;
             margin-top: 40px;
+            padding-top: 30px;
+            border-top: 1px solid #e0e6ef;
+        }
+        
+        .signature-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 30px;
+            margin-top: 20px;
         }
         
         .signature-box {
-            width: 300px;
-            text-align: center;
+            flex: 1;
+            min-width: 300px;
         }
         
-        .signature-line {
-            height: 1px;
-            background: #333;
-            margin: 40px 0 10px;
+        .signature-box h3 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #1a3a8f;
+        }
+        
+        .signature-pad {
+            width: 100%;
+            height: 150px;
+            border: 2px dashed #d1d9e6;
+            border-radius: 8px;
+            background: white;
+            cursor: crosshair;
+            margin-bottom: 15px;
+        }
+        
+        .signature-actions {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+        
+        .signature-btn {
+            flex: 1;
+            padding: 10px;
+            border: none;
+            border-radius: 6px;
+            background: #eef2f9;
+            color: #1a3a8f;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .signature-btn:hover {
+            background: #d1e0ff;
+        }
+        
+        .signature-preview {
+            width: 100%;
+            height: 100px;
+            border: 1px solid #d1d9e6;
+            border-radius: 8px;
+            background: #f8fafc;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+        
+        .signature-preview img {
+            max-width: 100%;
+            max-height: 100%;
+        }
+        
+        .signature-placeholder {
+            color: #94a3b8;
+            font-size: 0.9rem;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #2c3e50;
+        }
+        
+        input, textarea {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid #d1d9e6;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            background: white;
+        }
+        
+        input:focus, textarea:focus {
+            outline: none;
+            border-color: #2c5cc5;
+            box-shadow: 0 0 0 3px rgba(44, 92, 197, 0.2);
+        }
+        
+        textarea {
+            min-height: 100px;
+            resize: vertical;
         }
         
         .form-actions {
@@ -309,6 +402,12 @@
         }
         
         .btn-reset {
+            background: #f1f5f9;
+            color: #1a3a8f;
+            border: 1px solid #d1d9e6;
+        }
+        
+        .btn-print {
             background: #f1f5f9;
             color: #1a3a8f;
             border: 1px solid #d1d9e6;
@@ -593,22 +692,66 @@
                 
                 <!-- 咨询师签名 -->
                 <div class="signature-section">
-                    <div class="signature-box">
-                        <div class="signature-line"></div>
-                        <label>咨询师签名</label>
+                    <h2 style="text-align: center; margin-bottom: 20px; color: #1a3a8f;">咨询师签名</h2>
+                    
+                    <div class="signature-container">
+                        <div class="signature-box">
+                            <div class="form-group">
+                                <label>咨询师签字确认：</label>
+                                <input type="text" name="client_signature_text" placeholder="请输入您的姓名" required>
+                            </div>
+
+                            <div class="signature-pad" id="signature-pad"></div>
+                            
+                            <div class="signature-actions">
+                                <button type="button" class="signature-btn" id="clear-signature">
+                                    <i class="fas fa-eraser"></i> 清除签名
+                                </button>
+                                <button type="button" class="signature-btn" id="save-signature">
+                                    <i class="fas fa-save"></i> 保存签名
+                                </button>
+                            </div>
+                            
+                            <!-- <div class="form-group">
+                                <label>签名预览：</label>
+                                <div class="signature-preview" id="signature-preview">
+                                    <div class="signature-placeholder">签名将显示在这里</div>
+                                </div>
+                            </div> -->
+                        </div>
+                        
+                        <div class="signature-box">
+                            
+                            <div class="form-group">
+                                <label>日期：</label>
+                                <input type="date" name="signature_date" required>
+                            </div>
+                            
+                            <!-- <div class="form-group">
+                                <label>签名图片（压缩后）：</label>
+                                <div class="signature-preview" id="compressed-preview">
+                                    <div class="signature-placeholder">压缩后的签名将显示在这里</div>
+                                </div>
+                            </div> -->
+                            
+                            <input type="hidden" name="signature_image" id="signature-image">
+                            <input type="hidden" name="compressed_signature" id="compressed-signature">
+                        </div>
                     </div>
                 </div>
                 
                 <div class="form-actions">
                     <button type="reset" class="btn btn-reset"><i class="fas fa-redo"></i> 重置表单</button>
                     <button type="submit" class="btn btn-submit"><i class="fas fa-paper-plane"></i> 提交访谈表</button>
+                    <button class="btn btn-print"><i class="fas fa-print"></i> 打印访谈表</button>
                 </div>
             </form>
         </div>
         
         <footer>
-            <p>南开大学心理健康教育中心 © 2023 | 专业 · 保密 · 尊重</p>
+            <p>南开大学心理健康教育中心 © 2025 | 专业 · 保密 · 尊重</p>
             <p>地址：天津市南开区卫津路94号 | 电话：022-23505432</p>
+            <p>技术支持：落枫工作室</p>
         </footer>
     </div>
     
@@ -617,7 +760,6 @@
             // 设置默认日期为今天
             const today = new Date();
             const formattedDate = today.toISOString().split('T')[0];
-            document.getElementById('consult-date').value = formattedDate;
             
             // 设置默认时间（当前时间）
             const now = new Date();
@@ -630,6 +772,169 @@
             const endHours = endTime.getHours().toString().padStart(2, '0');
             const endMinutes = endTime.getMinutes().toString().padStart(2, '0');
             document.querySelector('input[name="end_time"]').value = `${endHours}:${endMinutes}`;
+
+            // 设置签名日期为今天
+            document.querySelector('input[name="signature_date"]').value = formattedDate;
+            
+            // 签名板功能
+            const canvas = document.createElement('canvas');
+            const signaturePad = document.getElementById('signature-pad');
+            signaturePad.appendChild(canvas);
+            
+            // 设置Canvas尺寸
+            canvas.width = signaturePad.offsetWidth;
+            canvas.height = signaturePad.offsetHeight;
+            
+            const ctx = canvas.getContext('2d');
+            ctx.strokeStyle = '#1a3a8f';
+            ctx.lineWidth = 2;
+            
+            let drawing = false;
+            let lastX = 0;
+            let lastY = 0;
+            
+            // 鼠标事件
+            canvas.addEventListener('mousedown', startDrawing);
+            canvas.addEventListener('mousemove', draw);
+            canvas.addEventListener('mouseup', stopDrawing);
+            canvas.addEventListener('mouseout', stopDrawing);
+            
+            // 触摸事件
+            canvas.addEventListener('touchstart', handleTouchStart);
+            canvas.addEventListener('touchmove', handleTouchMove);
+            canvas.addEventListener('touchend', stopDrawing);
+            
+            function startDrawing(e) {
+                drawing = true;
+                const rect = canvas.getBoundingClientRect();
+                
+                if (e.type === 'mousedown') {
+                    lastX = e.clientX - rect.left;
+                    lastY = e.clientY - rect.top;
+                } else if (e.type === 'touchstart') {
+                    lastX = e.touches[0].clientX - rect.left;
+                    lastY = e.touches[0].clientY - rect.top;
+                }
+            }
+            
+            function draw(e) {
+                if (!drawing) return;
+                
+                const rect = canvas.getBoundingClientRect();
+                let currentX, currentY;
+                
+                if (e.type === 'mousemove') {
+                    currentX = e.clientX - rect.left;
+                    currentY = e.clientY - rect.top;
+                } else if (e.type === 'touchmove') {
+                    currentX = e.touches[0].clientX - rect.left;
+                    currentY = e.touches[0].clientY - rect.top;
+                }
+                
+                ctx.beginPath();
+                ctx.moveTo(lastX, lastY);
+                ctx.lineTo(currentX, currentY);
+                ctx.stroke();
+                
+                lastX = currentX;
+                lastY = currentY;
+            }
+            
+            function stopDrawing() {
+                drawing = false;
+            }
+            
+            function handleTouchStart(e) {
+                e.preventDefault();
+                startDrawing(e);
+            }
+            
+            function handleTouchMove(e) {
+                e.preventDefault();
+                draw(e);
+            }
+            
+            // 清除签名
+            document.getElementById('clear-signature').addEventListener('click', function() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                document.getElementById('signature-preview').innerHTML = '<div class="signature-placeholder">签名将显示在这里</div>';
+                document.getElementById('compressed-preview').innerHTML = '<div class="signature-placeholder">压缩后的签名将显示在这里</div>';
+                document.getElementById('signature-image').value = '';
+                document.getElementById('compressed-signature').value = '';
+            });
+            
+            // 保存签名
+            document.getElementById('save-signature').addEventListener('click', function() {
+                // 原始签名图片
+                const signatureData = canvas.toDataURL('image/png', .5);
+                document.getElementById('signature-image').value = signatureData;
+                
+                // 显示预览
+                // const preview = document.getElementById('signature-preview');
+                // preview.innerHTML = '';
+                // const img = document.createElement('img');
+                // img.src = signatureData;
+                // preview.appendChild(img);
+                
+                // 压缩签名图片
+                compressSignature(signatureData);
+            });
+            
+            // 压缩签名图片
+            function compressSignature(dataUrl) {
+                const img = new Image();
+                img.src = dataUrl;
+                
+                img.onload = function() {
+                    const maxWidth = 400;
+                    const maxHeight = 200;
+                    let width = img.width;
+                    let height = img.height;
+                    
+                    // 计算缩放比例
+                    if (width > maxWidth) {
+                        height = Math.round((height * maxWidth) / width);
+                        width = maxWidth;
+                    }
+                    
+                    if (height > maxHeight) {
+                        width = Math.round((width * maxHeight) / height);
+                        height = maxHeight;
+                    }
+                    
+                    // 创建Canvas进行压缩
+                    const compressCanvas = document.createElement('canvas');
+                    compressCanvas.width = width;
+                    compressCanvas.height = height;
+                    
+                    const compressCtx = compressCanvas.getContext('2d');
+                    compressCtx.drawImage(img, 0, 0, width, height);
+                    
+                    // 获取压缩后的图片数据 (使用JPEG格式和0.5质量)
+                    const compressedData = compressCanvas.toDataURL('image/jpeg', 0.5);
+                    
+                    // 保存压缩后的数据
+                    document.getElementById('compressed-signature').value = compressedData;
+                    
+                    // 显示压缩预览
+                    // const compressedPreview = document.getElementById('compressed-preview');
+                    // compressedPreview.innerHTML = '';
+                    // const compressedImg = document.createElement('img');
+                    // compressedImg.src = compressedData;
+                    // compressedPreview.appendChild(compressedImg);
+                    
+                    // 计算并显示压缩率
+                    // const originalSize = Math.round(dataUrl.length / 1024);
+                    // const compressedSize = Math.round(compressedData.length / 1024);
+                    // const ratio = Math.round((1 - compressedSize / originalSize) * 100);
+                    
+                    /**
+                    compressedPreview.innerHTML += `<div style="text-align:center;margin-top:5px;font-size:12px;color:#64748b">
+                        压缩前: ${originalSize}KB 压缩后: ${compressedSize}KB (减少${ratio}%)
+                    </div>`;
+                    */
+                };
+            }
             
             // 表单提交处理
             document.getElementById('interview-form').addEventListener('submit', function(e) {
@@ -651,11 +956,15 @@
                 
                 // 模拟提交成功的UI反馈
                 this.reset();
-                document.getElementById('consult-date').value = formattedDate;
                 
                 // 重置时间
                 document.querySelector('input[name="start_time"]').value = `${hours}:${minutes}`;
                 document.querySelector('input[name="end_time"]').value = `${endHours}:${endMinutes}`;
+            });
+
+            // 打印功能
+            document.querySelector('.btn-print').addEventListener('click', function() {
+                window.print();
             });
         });
     </script>

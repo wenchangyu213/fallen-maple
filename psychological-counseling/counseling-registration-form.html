@@ -252,6 +252,12 @@
             border: 1px solid #d1d9e6;
         }
         
+        .btn-print {
+            background: #f1f5f9;
+            color: #1a3a8f;
+            border: 1px solid #d1d9e6;
+        }
+        
         .btn:hover {
             transform: translateY(-3px);
             box-shadow: 0 7px 20px rgba(0, 0, 0, 0.15);
@@ -876,13 +882,15 @@
                 <div class="form-actions">
                     <button type="reset" class="btn btn-reset"><i class="fas fa-redo"></i> 重置表单</button>
                     <button type="submit" class="btn btn-submit"><i class="fas fa-paper-plane"></i> 提交登记表</button>
+                    <button class="btn btn-print"><i class="fas fa-print"></i> 打印登记表</button>
                 </div>
             </form>
         </div>
         
         <footer>
-            <p>南开大学心理健康教育中心 © 2023 | 专业 · 保密 · 尊重</p>
+            <p>南开大学心理健康教育中心 © 2025 | 专业 · 保密 · 尊重</p>
             <p>地址：天津市南开区卫津路94号 | 电话：022-23505432</p>
+            <p>技术支持：落枫工作室</p>
         </footer>
     </div>
     
@@ -917,6 +925,11 @@
                 // 模拟提交成功的UI反馈
                 this.reset();
                 document.getElementById('birthdate').value = formattedDate;
+            });
+
+            // 打印功能
+            document.querySelector('.btn-print').addEventListener('click', function() {
+                window.print();
             });
         });
     </script>

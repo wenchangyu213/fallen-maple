@@ -1,0 +1,537 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>网页分类导航</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #1a2a6c, #b21f1f, #1a2a6c);
+            color: #333;
+            min-height: 100vh;
+            padding-bottom: 40px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            text-align: center;
+            padding: 40px 0 30px;
+            color: white;
+            position: relative;
+        }
+
+        header h1 {
+            font-size: 2.8rem;
+            margin-bottom: 10px;
+            text-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+            animation: fadeIn 1s ease-in-out;
+        }
+
+        header p {
+            font-size: 1.2rem;
+            max-width: 700px;
+            margin: 0 auto;
+            opacity: 0.9;
+        }
+
+        .search-container {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 50px;
+            max-width: 700px;
+            margin: 30px auto;
+            padding: 8px 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            display: flex;
+            align-items: center;
+            position: sticky;
+            top: 20px;
+            z-index: 100;
+        }
+
+        .search-container i {
+            color: #777;
+            font-size: 1.3rem;
+            margin-right: 10px;
+        }
+
+        #search-input {
+            flex: 1;
+            border: none;
+            outline: none;
+            padding: 15px 10px;
+            font-size: 1.1rem;
+            background: transparent;
+        }
+
+        .layout {
+            display: flex;
+            gap: 30px;
+            margin-top: 20px;
+        }
+
+        .categories {
+            flex: 0 0 280px;
+            background: rgba(255, 255, 255, 0.92);
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        .category {
+            margin-bottom: 15px;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 15px;
+        }
+
+        .category-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 15px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .category-header:hover {
+            background: #e9ecef;
+        }
+
+        .category-header h3 {
+            font-size: 1.25rem;
+            color: #2c3e50;
+            margin: 0;
+        }
+
+        .toggle-btn {
+            background: none;
+            border: none;
+            font-size: 1.2rem;
+            cursor: pointer;
+            color: #6c757d;
+            transition: transform 0.3s ease;
+        }
+
+        .toggle-btn.collapsed {
+            transform: rotate(-90deg);
+        }
+
+        .links {
+            padding: 15px 0 0 15px;
+            display: grid;
+            gap: 12px;
+        }
+
+        .link-item {
+            padding: 12px 15px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+            transition: all 0.2s ease;
+            border-left: 3px solid #3498db;
+        }
+
+        .link-item:hover {
+            transform: translateX(5px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            border-left: 3px solid #e74c3c;
+        }
+
+        .link-item a {
+            text-decoration: none;
+            color: #2980b9;
+            font-weight: 500;
+            font-size: 1.1rem;
+            display: block;
+        }
+
+        .link-item a:hover {
+            color: #e74c3c;
+        }
+
+        .content {
+            flex: 1;
+            background: rgba(255, 255, 255, 0.92);
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+        }
+
+        .content h2 {
+            color: #2c3e50;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #eee;
+        }
+
+        .instructions {
+            background: #e3f2fd;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 30px;
+        }
+
+        .instructions h3 {
+            color: #1976d2;
+            margin-bottom: 15px;
+        }
+
+        .instructions ul {
+            padding-left: 20px;
+        }
+
+        .instructions li {
+            margin-bottom: 10px;
+            line-height: 1.6;
+        }
+
+        .featured-links {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 20px;
+        }
+
+        .featured-card {
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+            transition: transform 0.3s ease;
+        }
+
+        .featured-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .card-header {
+            background: linear-gradient(to right, #3498db, #2c3e50);
+            color: white;
+            padding: 15px;
+        }
+
+        .card-body {
+            padding: 20px;
+        }
+
+        .card-body a {
+            display: block;
+            margin: 10px 0;
+            color: #2980b9;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .card-body a:hover {
+            color: #e74c3c;
+            text-decoration: underline;
+        }
+
+        .no-results {
+            text-align: center;
+            padding: 30px;
+            color: #6c757d;
+            font-style: italic;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .footer {
+            text-align: center;
+            color: white;
+            margin-top: 40px;
+            padding: 20px;
+            opacity: 0.8;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .layout {
+                flex-direction: column;
+            }
+
+            .categories {
+                flex: 1;
+                max-height: none;
+            }
+
+            .search-container {
+                max-width: 90%;
+            }
+
+            header h1 {
+                font-size: 2.2rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <header>
+            <h1><i class="fas fa-compass"></i> 网页分类导航系统</h1>
+            <p>高效组织与快速访问您的网页资源 - 支持搜索和分类管理</p>
+        </header>
+
+        <div class="search-container">
+            <i class="fas fa-search"></i>
+            <input type="text" id="search-input" placeholder="搜索网页名称...">
+        </div>
+
+        <div class="layout">
+            <div class="categories">
+                <!-- 分类导航将由JavaScript动态生成 -->
+            </div>
+
+            <div class="content">
+                <h2><i class="fas fa-star"></i> 欢迎使用网页导航系统</h2>
+
+                <div class="instructions">
+                    <h3><i class="fas fa-info-circle"></i> 使用说明</h3>
+                    <ul>
+                        <li>在左侧分类导航中点击分类名称可以展开/折叠该分类</li>
+                        <li>使用顶部搜索框可以按网页名称搜索内容</li>
+                        <li>点击网页链接将在新标签页中打开</li>
+                        <li>搜索结果会自动展开包含匹配项的分类</li>
+                        <li>系统完全响应式，可在各种设备上使用</li>
+                    </ul>
+                </div>
+
+                <h2><i class="fas fa-fire"></i> 推荐资源</h2>
+                <div class="featured-links">
+                    <div class="featured-card">
+                        <div class="card-header">
+                            <h3>开发工具</h3>
+                        </div>
+                        <div class="card-body">
+                            <a href="https://github.com" target="_blank">GitHub - 代码托管平台</a>
+                            <a href="https://stackoverflow.com" target="_blank">Stack Overflow - 开发者问答</a>
+                            <a href="https://codepen.io" target="_blank">CodePen - 前端代码实验</a>
+                        </div>
+                    </div>
+
+                    <div class="featured-card">
+                        <div class="card-header">
+                            <h3>设计资源</h3>
+                        </div>
+                        <div class="card-body">
+                            <a href="https://dribbble.com" target="_blank">Dribbble - 设计师作品展示</a>
+                            <a href="https://behance.net" target="_blank">Behance - 创意作品平台</a>
+                            <a href="https://unsplash.com" target="_blank">Unsplash - 免费高质量图片</a>
+                        </div>
+                    </div>
+
+                    <div class="featured-card">
+                        <div class="card-header">
+                            <h3>学习平台</h3>
+                        </div>
+                        <div class="card-body">
+                            <a href="https://coursera.org" target="_blank">Coursera - 大学在线课程</a>
+                            <a href="https://udemy.com" target="_blank">Udemy - 技能学习平台</a>
+                            <a href="https://khanacademy.org" target="_blank">Khan Academy - 免费教育资源</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer">
+            <p>© 2023 网页分类导航系统 | 使用纯HTML/CSS/JavaScript构建</p>
+        </div>
+    </div>
+
+    <script>
+        // 分类和链接数据
+        const categoriesData = [
+            {
+                name: "心理咨询系统",
+                links: [
+                    { name: "知情同意书", url: "./psychological-counseling/counseling-informed-consent.html" },
+                    { name: "录音/录音同意书", url: "./psychological-counseling/audio-video-recording-informed-consent.html" },
+                    { name: "心理咨询登记表", url: "./psychological-counseling/counseling-registration-form.html" },
+                    { name: "初始访谈表", url: "./psychological-counseling/first-counseling-form.html" },
+                    { name: "个案记录", url: "./psychological-counseling/personal-single-record.html" },
+                    { name: "安全协议", url: "./psychological-counseling/counseling-safety-agreement.html" },
+                ]
+            },
+            {
+                name: "搜索引擎",
+                links: [
+                    { name: "Google", url: "https://www.google.com" },
+                    { name: "百度", url: "https://www.baidu.com" },
+                    { name: "Bing", url: "https://www.bing.com" },
+                    { name: "DuckDuckGo", url: "https://duckduckgo.com" }
+                ]
+            },
+            {
+                name: "社交媒体",
+                links: [
+                    { name: "Facebook", url: "https://www.facebook.com" },
+                    { name: "Twitter", url: "https://twitter.com" },
+                    { name: "Instagram", url: "https://www.instagram.com" },
+                    { name: "LinkedIn", url: "https://www.linkedin.com" },
+                    { name: "Reddit", url: "https://www.reddit.com" }
+                ]
+            },
+            {
+                name: "新闻资讯",
+                links: [
+                    { name: "BBC新闻", url: "https://www.bbc.com/news" },
+                    { name: "CNN", url: "https://edition.cnn.com" },
+                    { name: "新浪新闻", url: "https://news.sina.com.cn" },
+                    { name: "Reuters", url: "https://www.reuters.com" }
+                ]
+            },
+            {
+                name: "技术开发",
+                links: [
+                    { name: "GitHub", url: "https://github.com" },
+                    { name: "Stack Overflow", url: "https://stackoverflow.com" },
+                    { name: "MDN Web Docs", url: "https://developer.mozilla.org" },
+                    { name: "W3Schools", url: "https://www.w3schools.com" },
+                    { name: "CodePen", url: "https://codepen.io" }
+                ]
+            },
+            {
+                name: "在线学习",
+                links: [
+                    { name: "Coursera", url: "https://www.coursera.org" },
+                    { name: "Udemy", url: "https://www.udemy.com" },
+                    { name: "Khan Academy", url: "https://www.khanacademy.org" },
+                    { name: "edX", url: "https://www.edx.org" }
+                ]
+            },
+            {
+                name: "视频平台",
+                links: [
+                    { name: "YouTube", url: "https://www.youtube.com" },
+                    { name: "Netflix", url: "https://www.netflix.com" },
+                    { name: "哔哩哔哩", url: "https://www.bilibili.com" },
+                    { name: "Vimeo", url: "https://vimeo.com" }
+                ]
+            }
+        ];
+
+        // 页面加载完成后初始化
+        document.addEventListener('DOMContentLoaded', function () {
+            const categoriesContainer = document.querySelector('.categories');
+
+            // 动态创建分类和链接
+            categoriesData.forEach(category => {
+                const categoryElement = document.createElement('div');
+                categoryElement.className = 'category';
+                categoryElement.innerHTML = `
+                    <div class="category-header">
+                        <h3>${category.name}</h3>
+                        <button class="toggle-btn"><i class="fas fa-chevron-down"></i></button>
+                    </div>
+                    <div class="links">
+                        ${category.links.map(link => `
+                            <div class="link-item">
+                                <a href="${link.url}" target="_blank">${link.name}</a>
+                            </div>
+                        `).join('')}
+                    </div>
+                `;
+                categoriesContainer.appendChild(categoryElement);
+
+                // 添加折叠/展开事件
+                const header = categoryElement.querySelector('.category-header');
+                const toggleBtn = categoryElement.querySelector('.toggle-btn');
+                const links = categoryElement.querySelector('.links');
+
+                header.addEventListener('click', () => {
+                    const isCollapsed = toggleBtn.classList.contains('collapsed');
+
+                    if (isCollapsed) {
+                        links.style.display = 'grid';
+                        toggleBtn.classList.remove('collapsed');
+                    } else {
+                        links.style.display = 'none';
+                        toggleBtn.classList.add('collapsed');
+                    }
+                });
+            });
+
+            // 搜索功能
+            const searchInput = document.getElementById('search-input');
+            searchInput.addEventListener('input', function () {
+                const searchTerm = this.value.toLowerCase();
+                const categories = document.querySelectorAll('.category');
+                let anyResults = false;
+
+                categories.forEach(category => {
+                    const links = category.querySelectorAll('.link-item');
+                    let hasVisibleLinks = false;
+
+                    links.forEach(link => {
+                        const linkName = link.textContent.toLowerCase();
+                        if (linkName.includes(searchTerm)) {
+                            link.classList.remove('hidden');
+                            hasVisibleLinks = true;
+                            anyResults = true;
+                        } else {
+                            link.classList.add('hidden');
+                        }
+                    });
+
+                    // 展开/折叠分类
+                    const toggleBtn = category.querySelector('.toggle-btn');
+                    const linksContainer = category.querySelector('.links');
+
+                    if (hasVisibleLinks) {
+                        linksContainer.style.display = 'grid';
+                        toggleBtn.classList.remove('collapsed');
+                    } else {
+                        linksContainer.style.display = 'none';
+                        toggleBtn.classList.add('collapsed');
+                    }
+                });
+
+                // 显示/隐藏"无结果"消息
+                const noResults = document.querySelector('.no-results');
+                if (!anyResults && searchTerm) {
+                    if (!noResults) {
+                        const noResultsElement = document.createElement('div');
+                        noResultsElement.className = 'no-results';
+                        noResultsElement.innerHTML = '<i class="fas fa-search"></i> 没有找到匹配的网页';
+                        categoriesContainer.appendChild(noResultsElement);
+                    }
+                } else if (noResults) {
+                    noResults.remove();
+                }
+            });
+        });
+    </script>
+</body>
+
+</html>
