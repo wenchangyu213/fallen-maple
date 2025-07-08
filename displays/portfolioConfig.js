@@ -422,15 +422,15 @@ let portfolioData = {
             "name": "小游戏 MiniGames",
             "items": [
                 {
-                    "title": "arc_dragtoaim",
-                    "description": "自动生成的页面截图: arc_mip_dragtoaim_1_en_play_al_all",
-                    "image": "./imgs/arc_mip_dragtoaim_1_en_play_al_all.jpg",
+                    "title": "star-tunnel-rush",
+                    "description": "自动生成的页面截图: star-tunnel-rush",
+                    "image": "./imgs/star-tunnel-rush.jpg",
                     "tags": [
-                        "Army Commander",
+                        "Parkour",
                         "3D"
                     ],
                     "priority": 9,
-                    "link": "./games/arc_mip_dragtoaim_1_en_play_al_all.html"
+                    "link": "./games/star-tunnel-rush/index.html"
                 },
             ]
         }
