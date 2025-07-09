@@ -432,6 +432,38 @@ let portfolioData = {
                     "priority": 9,
                     "link": "./games/star-tunnel-rush/index.html"
                 },
+                {
+                    "title": "doomsday-agent-team",
+                    "description": "自动生成的页面截图: doomsday-agent-team",
+                    "image": "./imgs/doomsday-agent-team.jpg",
+                    "tags": [
+                        "Rougelike"
+                    ],
+                    "priority": 9,
+                    "link": "./games/doomsday-agent-team/index.html"
+                },
+                {
+                    "title": "bag-heroes",
+                    "description": "自动生成的页面截图: bag-heroes",
+                    "image": "./imgs/bag-heroes.jpg",
+                    "tags": [
+                        "Rougelike"
+                    ],
+                    "priority": 9,
+                    "link": "./games/bag-heroes/index.html"
+                },
+                {
+                    "title": "fierce-battle-breakthrough",
+                    "description": "自动生成的页面截图: fierce-battle-breakthrough",
+                    "image": "./imgs/fierce-battle-breakthrough.jpg",
+                    "tags": [
+                        "Rougelike",
+                        "Parkour",
+                        "3D"
+                    ],
+                    "priority": 9,
+                    "link": "./games/fierce-battle-breakthrough/index.html"
+                },
             ]
         }
     ]

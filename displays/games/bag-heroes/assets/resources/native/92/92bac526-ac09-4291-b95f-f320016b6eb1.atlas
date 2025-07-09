@@ -1,0 +1,97 @@
+
+MonsterBlast_1.png
+size: 540,540
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+small-freeze-explosion_1
+  rotate: true
+  xy: 109, 435
+  size: 100, 105
+  orig: 100, 105
+  offset: 0, 0
+  index: -1
+small-freeze-explosion_10
+  rotate: true
+  xy: 430, 333
+  size: 100, 105
+  orig: 100, 105
+  offset: 0, 0
+  index: -1
+small-freeze-explosion_11
+  rotate: true
+  xy: 2, 231
+  size: 100, 105
+  orig: 100, 105
+  offset: 0, 0
+  index: -1
+small-freeze-explosion_12
+  rotate: true
+  xy: 109, 231
+  size: 100, 105
+  orig: 100, 105
+  offset: 0, 0
+  index: -1
+small-freeze-explosion_13
+  rotate: true
+  xy: 216, 231
+  size: 100, 105
+  orig: 100, 105
+  offset: 0, 0
+  index: -1
+small-freeze-explosion_2
+  rotate: true
+  xy: 216, 435
+  size: 100, 105
+  orig: 100, 105
+  offset: 0, 0
+  index: -1
+small-freeze-explosion_3
+  rotate: true
+  xy: 323, 435
+  size: 100, 105
+  orig: 100, 105
+  offset: 0, 0
+  index: -1
+small-freeze-explosion_4
+  rotate: true
+  xy: 430, 435
+  size: 100, 105
+  orig: 100, 105
+  offset: 0, 0
+  index: -1
+small-freeze-explosion_5
+  rotate: true
+  xy: 2, 333
+  size: 100, 105
+  orig: 100, 105
+  offset: 0, 0
+  index: -1
+small-freeze-explosion_6
+  rotate: true
+  xy: 109, 333
+  size: 100, 105
+  orig: 100, 105
+  offset: 0, 0
+  index: -1
+small-freeze-explosion_7
+  rotate: true
+  xy: 216, 333
+  size: 100, 105
+  orig: 100, 105
+  offset: 0, 0
+  index: -1
+small-freeze-explosion_8
+  rotate: true
+  xy: 323, 333
+  size: 100, 105
+  orig: 100, 105
+  offset: 0, 0
+  index: -1
+small-freeze-explosion_9
+  rotate: true
+  xy: 2, 435
+  size: 100, 105
+  orig: 100, 105
+  offset: 0, 0
+  index: -1
