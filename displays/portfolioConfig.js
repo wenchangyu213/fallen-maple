@@ -323,7 +323,7 @@ let portfolioData = {
                         "Slap King",
                         "3D"
                     ],
-                    "priority": 0,
+                    "priority": 9,
                     "link": "./games/slk_mip_kylin_slappeopleiteration_1_en_play_al_all.html"
                 },
                 {
@@ -343,7 +343,7 @@ let portfolioData = {
                     "tags": [
                         "The Superhero League"
                     ],
-                    "priority": 0,
+                    "priority": 9,
                     "link": "./games/tsl_mip_zombie_1_en_play_al_all.html"
                 },
                 {
@@ -419,7 +419,7 @@ let portfolioData = {
             ]
         },
         {
-            "name": "小游戏 MiniGames",
+            "name": "小游戏 Mini Games",
             "items": [
                 {
                     "title": "star-tunnel-rush",
@@ -449,7 +449,7 @@ let portfolioData = {
                     "tags": [
                         "Rougelike"
                     ],
-                    "priority": 9,
+                    "priority": 0,
                     "link": "./games/bag-heroes/index.html"
                 },
                 {
@@ -463,6 +463,102 @@ let portfolioData = {
                     ],
                     "priority": 9,
                     "link": "./games/fierce-battle-breakthrough/index.html"
+                },
+                {
+                    "title": "music-ball",
+                    "description": "自动生成的页面截图: music-ball",
+                    "image": "./imgs/music-ball.jpg",
+                    "tags": [
+                        "Parkour",
+                        "3D"
+                    ],
+                    "priority": 0,
+                    "link": "./games/music-ball/index.html"
+                },
+                {
+                    "title": "flying-knife-battle",
+                    "description": "自动生成的页面截图: flying-knife-battle",
+                    "image": "./imgs/flying-knife-battle.jpg",
+                    "tags": [
+                        "Other"
+                    ],
+                    "priority": 9,
+                    "link": "./games/flying-knife-battle/index.html"
+                },
+                {
+                    "title": "joy-water-glass",
+                    "description": "自动生成的页面截图: joy-water-glass",
+                    "image": "./imgs/joy-water-glass.jpg",
+                    "tags": [
+                        "Other"
+                    ],
+                    "priority": 0,
+                    "link": "./games/joy-water-glass/index.html"
+                },
+                {
+                    "title": "happy-match",
+                    "description": "自动生成的页面截图: happy-match",
+                    "image": "./imgs/happy-match.jpg",
+                    "tags": [
+                        "Match3"
+                    ],
+                    "priority": 0,
+                    "link": "./games/happy-match/index.html"
+                },
+                {
+                    "title": "earn-a-mini-target",
+                    "description": "自动生成的页面截图: earn-a-mini-target",
+                    "image": "./imgs/earn-a-mini-target.jpg",
+                    "tags": [
+                        "Simulate"
+                    ],
+                    "priority": 9,
+                    "link": "./games/earn-a-mini-target/index.html"
+                },
+                {
+                    "title": "jump-one-jump",
+                    "description": "自动生成的页面截图: jump-one-jump",
+                    "image": "./imgs/jump-one-jump.jpg",
+                    "tags": [
+                        "Other"
+                    ],
+                    "priority": 0,
+                    "link": "./games/jump-one-jump/index.html"
+                },
+                {
+                    "title": "life-restart-simulator",
+                    "description": "自动生成的页面截图: life-restart-simulator",
+                    "image": "./imgs/life-restart-simulator.jpg",
+                    "tags": [
+                        "Simulator"
+                    ],
+                    "priority": 0,
+                    "link": "./games/life-restart-simulator/index.html"
+                },
+                {
+                    "title": "eliminate-virus",
+                    "description": "自动生成的页面截图: eliminate-virus",
+                    "image": "./imgs/eliminate-virus.jpg",
+                    "tags": [
+                        "Rougelike"
+                    ],
+                    "priority": 9,
+                    "link": "./games/eliminate-virus/index.html"
+                },
+            ]
+        },
+        {
+            "name": "手游 Mobile Games",
+            "items": [
+                {
+                    "title": "zz-landlords",
+                    "description": "自动生成的页面截图: zz-landlords",
+                    "image": "./imgs/zz-landlords.jpg",
+                    "tags": [
+                        "Landlord"
+                    ],
+                    "priority": 0,
+                    "link": "./video.html?v=zz-landlords.mp4"
                 },
             ]
         }
