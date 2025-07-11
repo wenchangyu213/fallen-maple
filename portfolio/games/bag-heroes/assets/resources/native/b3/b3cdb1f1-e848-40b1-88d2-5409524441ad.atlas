@@ -1,0 +1,160 @@
+
+General_101.png
+size: 1024,128
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+eff_line1
+  rotate: true
+  xy: 550, 28
+  size: 98, 58
+  orig: 98, 58
+  offset: 0, 0
+  index: -1
+嘴巴
+  rotate: false
+  xy: 356, 8
+  size: 25, 11
+  orig: 27, 13
+  offset: 1, 1
+  index: -1
+头发
+  rotate: true
+  xy: 309, 21
+  size: 105, 87
+  orig: 107, 89
+  offset: 1, 1
+  index: -1
+头发后
+  rotate: true
+  xy: 742, 5
+  size: 49, 42
+  orig: 49, 42
+  offset: 0, 0
+  index: -1
+帽子
+  rotate: false
+  xy: 610, 56
+  size: 68, 36
+  orig: 70, 38
+  offset: 1, 1
+  index: -1
+手2
+  rotate: false
+  xy: 722, 56
+  size: 33, 36
+  orig: 35, 38
+  offset: 1, 1
+  index: -1
+投影
+  rotate: false
+  xy: 610, 94
+  size: 126, 32
+  orig: 128, 34
+  offset: 1, 1
+  index: -1
+武器手
+  rotate: true
+  xy: 459, 10
+  size: 15, 13
+  orig: 17, 15
+  offset: 1, 1
+  index: -1
+武器手2
+  rotate: true
+  xy: 383, 2
+  size: 17, 16
+  orig: 19, 18
+  offset: 1, 1
+  index: -1
+眉毛
+  rotate: false
+  xy: 550, 2
+  size: 62, 24
+  orig: 64, 26
+  offset: 1, 1
+  index: -1
+眼睛
+  rotate: false
+  xy: 401, 4
+  size: 56, 21
+  orig: 58, 23
+  offset: 1, 1
+  index: -1
+肩甲
+  rotate: false
+  xy: 738, 99
+  size: 37, 27
+  orig: 37, 27
+  offset: 0, 0
+  index: -1
+肩甲2
+  rotate: true
+  xy: 757, 60
+  size: 37, 27
+  orig: 37, 27
+  offset: 0, 0
+  index: -1
+胡子
+  rotate: false
+  xy: 309, 3
+  size: 45, 16
+  orig: 45, 16
+  offset: 0, 0
+  index: -1
+胡子2
+  rotate: true
+  xy: 487, 12
+  size: 114, 61
+  orig: 114, 61
+  offset: 0, 0
+  index: -1
+脸
+  rotate: true
+  xy: 398, 27
+  size: 99, 87
+  orig: 101, 89
+  offset: 1, 1
+  index: -1
+蛇
+  rotate: false
+  xy: 2, 6
+  size: 202, 120
+  orig: 202, 120
+  offset: 0, 0
+  index: -1
+袖子1
+  rotate: true
+  xy: 682, 17
+  size: 37, 58
+  orig: 38, 58
+  offset: 0, 0
+  index: -1
+袖子2
+  rotate: true
+  xy: 680, 56
+  size: 36, 40
+  orig: 36, 40
+  offset: 0, 0
+  index: -1
+袖子3
+  rotate: true
+  xy: 614, 17
+  size: 37, 66
+  orig: 38, 70
+  offset: 0, 1
+  index: -1
+身体
+  rotate: true
+  xy: 206, 13
+  size: 113, 101
+  orig: 114, 101
+  offset: 1, 0
+  index: -1
+鼻子
+  rotate: false
+  xy: 206, 4
+  size: 5, 7
+  orig: 7, 9
+  offset: 1, 1
+  index: -1
