@@ -5,6 +5,16 @@ document.addEventListener('DOMContentLoaded', async function () {
 
     baseSearchPriority = getQueryParam('p') || 0;
 
+    document.getElementById('footer').innerHTML = `© 2025 ${getQueryParam('name') || '俞文昶'} 个人作品集展示 | 精心制作，持续更新`;
+
+    const nowDate = new Date().getTime();
+    const te = getQueryParam('te');// 允许查询的最大时间戳
+    if (te && nowDate > te) return;
+
+    // 渲染页面
+    renderTags();
+    renderPortfolio();
+
     // 搜索功能
     document.getElementById('search-input').addEventListener('input', filterPortfolio);
 
@@ -24,16 +34,6 @@ document.addEventListener('DOMContentLoaded', async function () {
         document.querySelectorAll('.tag').forEach(tag => tag.classList.remove('active'));
         renderPortfolio('', [], 9);
     });
-
-    document.getElementById('footer').innerHTML = `© 2025 ${getQueryParam('name') || '俞文昶'} 个人作品集展示 | 精心制作，持续更新`;
-
-    const nowDate = new Date().getTime();
-    const te = getQueryParam('te');// 允许查询的最大时间戳
-    if (te && nowDate > te) return;
-
-    // 渲染页面
-    renderTags();
-    renderPortfolio();
 });
 
 // 获取所有标签
