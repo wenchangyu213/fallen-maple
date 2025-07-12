@@ -545,6 +545,38 @@ let portfolioData = {
                     "priority": 9,
                     "link": "./games/eliminate-virus/index.html"
                 },
+                {
+                    "title": "cut-fruits",
+                    "description": "自动生成的页面截图: cut-fruits",
+                    "image": "./imgs/cut-fruits.jpg",
+                    "tags": [
+                        "3D"
+                    ],
+                    "priority": 0,
+                    "link": "./games/cut-fruits/index.html"
+                },
+                {
+                    "title": "ghost-shooter",
+                    "description": "自动生成的页面截图: ghost-shooter",
+                    "image": "./imgs/ghost-shooter.jpg",
+                    "tags": [
+                        "Adventure",
+                        "3D"
+                    ],
+                    "priority": 9,
+                    "link": "./games/ghost-shooter/index.html"
+                },
+                {
+                    "title": "running-fairy-girl",
+                    "description": "自动生成的页面截图: running-fairy-girl",
+                    "image": "./imgs/running-fairy-girl.jpg",
+                    "tags": [
+                        "Parkour",
+                        "3D"
+                    ],
+                    "priority": 0,
+                    "link": "./games/running-fairy-girl/index.html"
+                },
             ]
         },
         {
