@@ -10,8 +10,8 @@
 <body>
     <div class="container">
         <header>
-            <h1>我的作品集展示</h1>
-            <p class="subtitle">探索我的设计、开发和创新项目，每个项目都凝聚了我的热情与专业技能</p>
+            <h1 id="titleH1">我的作品集展示</h1>
+            <p class="subtitle" id="subtitle">探索我的设计、开发和创新项目，每个项目都凝聚了我的热情与专业技能</p>
         </header>
         
         <section class="search-section">
@@ -23,7 +23,7 @@
             </div>
             <div class="controls">
                 <button class="btn" id="show-all">显示所有项目</button>
-                <button class="btn" id="show-high-priority">显示推荐项目</button>
+                <button class="btn" id="show-recommend">显示推荐项目</button>
             </div>
         </section>
         
@@ -36,6 +36,7 @@
         </footer>
     </div>
 
+    <script type="text/javascript" src="./i18n.js"></script>
     <!-- 加载数据文件 -->
     <script type="text/javascript" src="./portfolioConfig.js"></script>
     <!-- 解析并渲染页面 -->

@@ -1,17 +1,19 @@
 let baseSearchPriority = 0;
+let lang = "zh-cn";
 
 // 初始化页面
 document.addEventListener('DOMContentLoaded', async function () {
 
     baseSearchPriority = getQueryParam('p') || 0;
 
-    document.getElementById('footer').innerHTML = `© 2025 ${getQueryParam('name') || '俞文昶'} 个人作品集展示 | 精心制作，持续更新`;
-
     const nowDate = new Date().getTime();
     const te = getQueryParam('te');// 允许查询的最大时间戳
     if (te && nowDate > te) return;
 
+    lang = getQueryParam('lang') || lang;
+
     // 渲染页面
+    renderBase();
     renderTags();
     renderPortfolio();
 
@@ -30,11 +32,22 @@ document.addEventListener('DOMContentLoaded', async function () {
         renderPortfolio();
     });
 
-    document.getElementById('show-high-priority').addEventListener('click', () => {
+    document.getElementById('show-recommend').addEventListener('click', () => {
         document.querySelectorAll('.tag').forEach(tag => tag.classList.remove('active'));
         renderPortfolio('', [], 9);
     });
 });
+
+// 根据多语言渲染基本页面内容
+function renderBase() {
+    document.title = i18n[lang].title;
+    document.getElementById('titleH1').innerHTML = i18n[lang].title;
+    document.getElementById('subtitle').innerHTML = i18n[lang].subtitle;
+    document.getElementById('search-input').setAttribute('placeholder', i18n[lang].searchPlaceholder);
+    document.getElementById('show-all').innerHTML = i18n[lang].btnShowAll;
+    document.getElementById('show-recommend').innerHTML = i18n[lang].btnShowRecommend;
+    document.getElementById('footer').innerHTML = i18n[lang].footer.replace('###', getQueryParam('name'));
+}
 
 // 获取所有标签
 function getAllTags() {
@@ -118,7 +131,7 @@ function renderPortfolio(searchText = '', selectedTags = [], searchPriority = 0)
             categoryElement.innerHTML = `
                 <div class="category-header" data-category-index="${index}">
                     <div class="category-title">${category.name}</div>
-                    <div class="item-count">${filteredItems.length} 个项目</div>
+                    <div class="item-count">${i18n[lang].itemCount.replace('###', filteredItems.length)}</div>
                     <div class="toggle-icon">
                         <i class="fas fa-chevron-down"></i>
                     </div>
@@ -143,8 +156,8 @@ function renderPortfolio(searchText = '', selectedTags = [], searchPriority = 0)
         portfolioContainer.innerHTML = `
             <div class="no-results">
                 <i class="fas fa-search"></i>
-                <h3>没有找到匹配的项目</h3>
-                <p>请尝试不同的搜索词或标签组合</p>
+                <h3>${i18n[lang].noMatchedItems}</h3>
+                <p>${i18n[lang].tryDifferentSearch}</p>
             </div>
         `;
     }
@@ -163,7 +176,7 @@ function createCardHTML(item) {
                 <div class="card-tags">
                     ${item.tags.map(tag => `<span class="card-tag">${tag}</span>`).join('')}
                 </div>
-                <a href="${item.link}" class="card-link" target="_blank">预览项目</a>
+                <a href="${item.link}" class="card-link" target="_blank">${i18n[lang].itemPreview}</a>
             </div>
         </div>
     `;

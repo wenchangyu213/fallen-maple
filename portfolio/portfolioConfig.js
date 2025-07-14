@@ -9,9 +9,10 @@ let portfolioData = {
                     "image": "./imgs/arc_mip_dragtoaim_1_en_play_al_all.jpg",
                     "tags": [
                         "Army Commander",
-                        "3D"
+                        "3D",
+                        "Hyper Casual"
                     ],
-                    "priority": 9,
+                    "priority": 0,
                     "link": "./games/arc_mip_dragtoaim_1_en_play_al_all.html"
                 },
                 {
@@ -20,7 +21,8 @@ let portfolioData = {
                     "image": "./imgs/arc_mip_harvesting_1_en_play_al_all.jpg",
                     "tags": [
                         "Army Commander",
-                        "3D"
+                        "3D",
+                        "Hyper Casual"
                     ],
                     "priority": 0,
                     "link": "./games/arc_mip_harvesting_1_en_play_al_all.html"
@@ -31,7 +33,8 @@ let portfolioData = {
                     "image": "./imgs/arc_mip_parkour_1_en_play_al_all.jpg",
                     "tags": [
                         "Army Commander",
-                        "3D"
+                        "3D",
+                        "Hyper Casual"
                     ],
                     "priority": 0,
                     "link": "./games/arc_mip_parkour_1_en_play_al_all.html"
@@ -41,9 +44,10 @@ let portfolioData = {
                     "description": "自动生成的页面截图: bea_mip_dragtoshot_1_en_play_al_all",
                     "image": "./imgs/bea_mip_dragtoshot_1_en_play_al_all.jpg",
                     "tags": [
-                        "Beast Arena"
+                        "Beast Arena",
+                        "Casual"
                     ],
-                    "priority": 0,
+                    "priority": 10,
                     "link": "./games/bea_mip_dragtoshot_1_en_play_al_all.html"
                 },
                 {
@@ -62,7 +66,8 @@ let portfolioData = {
                     "image": "./imgs/bnb_mip_kylin_3dbnbhitv2_1_en_play_al_all.jpg",
                     "tags": [
                         "Break n Balls",
-                        "3D"
+                        "3D",
+                        "Hyper Casual"
                     ],
                     "priority": 0,
                     "link": "./games/bnb_mip_kylin_3dbnbhitv2_1_en_play_al_all.html"
@@ -73,7 +78,8 @@ let portfolioData = {
                     "image": "./imgs/bnb_mip_kylin_3dtilehitv1_1_en_play_al_all.jpg",
                     "tags": [
                         "Break n Balls",
-                        "3D"
+                        "3D",
+                        "Hyper Casual"
                     ],
                     "priority": 9,
                     "link": "./games/bnb_mip_kylin_3dtilehitv1_1_en_play_al_all.html"
@@ -83,7 +89,8 @@ let portfolioData = {
                     "description": "自动生成的页面截图: bnb_mip_houseandbarbie_1_en_play_al_all",
                     "image": "./imgs/bnb_mip_houseandbarbie_1_en_play_al_all.jpg",
                     "tags": [
-                        "Break n Balls"
+                        "Break n Balls",
+                        "Hyper Casual"
                     ],
                     "priority": 0,
                     "link": "./games/bnb_mip_houseandbarbie_1_en_play_al_all.html"
@@ -113,9 +120,10 @@ let portfolioData = {
                     "description": "自动生成的页面截图: ckm_mip_kitchenupgradeiteration_1_en_play_al_all",
                     "image": "./imgs/ckm_mip_kitchenupgradeiteration_1_en_play_al_all.jpg",
                     "tags": [
-                        "Cooking Madness"
+                        "Cooking Madness",
+                        "Casual"
                     ],
-                    "priority": 0,
+                    "priority": 9,
                     "link": "./games/ckm_mip_kitchenupgradeiteration_1_en_play_al_all.html"
                 },
                 {
@@ -133,7 +141,8 @@ let portfolioData = {
                     "description": "自动生成的页面截图: ckm_mip_kylin_kitchenupgradehalloween_1_en_play_al_all",
                     "image": "./imgs/ckm_mip_kylin_kitchenupgradehalloween_1_en_play_al_all.jpg",
                     "tags": [
-                        "Cooking Madness"
+                        "Cooking Madness",
+                        "Casual"
                     ],
                     "priority": 0,
                     "link": "./games/ckm_mip_kylin_kitchenupgradehalloween_1_en_play_al_all.html"
@@ -154,7 +163,8 @@ let portfolioData = {
                     "image": "./imgs/cts_mip_3dcylinder_1_en_play_al_all.jpg",
                     "tags": [
                         "Cash Tornado",
-                        "3D"
+                        "3D",
+                        "Slots"
                     ],
                     "priority": 0,
                     "link": "./games/cts_mip_3dcylinder_1_en_play_al_all.html"
@@ -165,7 +175,8 @@ let portfolioData = {
                     "image": "./imgs/cts_mip_3dcylinder_2_en_play_al_all.jpg",
                     "tags": [
                         "Cash Tornado",
-                        "3D"
+                        "3D",
+                        "Slots"
                     ],
                     "priority": 0,
                     "link": "./games/cts_mip_3dcylinder_2_en_play_al_all.html"
@@ -176,7 +187,8 @@ let portfolioData = {
                     "image": "./imgs/cts_mip_findthe7s_1_en_play_al_all.jpg",
                     "tags": [
                         "Cash Tornado",
-                        "3D"
+                        "3D",
+                        "Slots"
                     ],
                     "priority": 0,
                     "link": "./games/cts_mip_findthe7s_1_en_play_al_all.html"
@@ -186,7 +198,8 @@ let portfolioData = {
                     "description": "自动生成的页面截图: cts_mip_kylin_dragontetris_1_en_play_al_all",
                     "image": "./imgs/cts_mip_kylin_dragontetris_1_en_play_al_all.jpg",
                     "tags": [
-                        "Cash Tornado"
+                        "Cash Tornado",
+                        "Slots"
                     ],
                     "priority": 0,
                     "link": "./games/cts_mip_kylin_dragontetris_1_en_play_al_all.html"
@@ -196,7 +209,8 @@ let portfolioData = {
                     "description": "自动生成的页面截图: cts_mip_kylin_zeusvshades_1_en_play_al_all",
                     "image": "./imgs/cts_mip_kylin_zeusvshades_1_en_play_al_all.jpg",
                     "tags": [
-                        "Cash Tornado"
+                        "Cash Tornado",
+                        "Slots"
                     ],
                     "priority": 0,
                     "link": "./games/cts_mip_kylin_zeusvshades_1_en_play_al_all.html"
@@ -206,7 +220,8 @@ let portfolioData = {
                     "description": "自动生成的页面截图: dm_mip_choosetheme_1_en_play_al_all",
                     "image": "./imgs/dm_mip_choosetheme_1_en_play_al_all.jpg",
                     "tags": [
-                        "Deco Match"
+                        "Deco Match",
+                        "Hyper Casual"
                     ],
                     "priority": 0,
                     "link": "./games/dm_mip_choosetheme_1_en_play_al_all.html"
@@ -216,7 +231,8 @@ let portfolioData = {
                     "description": "自动生成的页面截图: fni_mip_cokylin_differentexpression_01_real_na_noseason_en_12clk_na_al",
                     "image": "./imgs/fni_mip_cokylin_differentexpression_01_real_na_noseason_en_12clk_na_al.jpg",
                     "tags": [
-                        "Found It"
+                        "Found It",
+                        "Hyper Casual"
                     ],
                     "priority": 0,
                     "link": "./games/fni_mip_cokylin_differentexpression_01_real_na_noseason_en_12clk_na_al.html"
@@ -226,7 +242,8 @@ let portfolioData = {
                     "description": "自动生成的页面截图: fni_mip_cokylin_lightthetown_01_real_na_noseason_en_20clk_na_al",
                     "image": "./imgs/fni_mip_cokylin_lightthetown_01_real_na_noseason_en_20clk_na_al.jpg",
                     "tags": [
-                        "Found It"
+                        "Found It",
+                        "Hyper Casual"
                     ],
                     "priority": 9,
                     "link": "./games/fni_mip_cokylin_lightthetown_01_real_na_noseason_en_20clk_na_al.html"
@@ -247,9 +264,10 @@ let portfolioData = {
                     "image": "./imgs/hxs_mip_cokylin_3dmajong_01_real_na_noseason_en_99clk_na_al.jpg",
                     "tags": [
                         "Hexa Sort",
-                        "3D"
+                        "3D",
+                        "Casual"
                     ],
-                    "priority": 9,
+                    "priority": 10,
                     "link": "./games/hxs_mip_cokylin_3dmajong_01_real_na_noseason_en_99clk_na_al.html"
                 },
                 {
@@ -269,7 +287,8 @@ let portfolioData = {
                     "image": "./imgs/hxs_mip_cokylin_3dsharpnesselimination_01_real_na_noseason_en_10clk_na_al.jpg",
                     "tags": [
                         "Hexa Sort",
-                        "3D"
+                        "3D",
+                        "Casual"
                     ],
                     "priority": 0,
                     "link": "./games/hxs_mip_cokylin_3dsharpnesselimination_01_real_na_noseason_en_10clk_na_al.html"
@@ -279,7 +298,8 @@ let portfolioData = {
                     "description": "自动生成的页面截图: inc_mip_EarnMoney_1_en_play_al_all",
                     "image": "./imgs/inc_mip_EarnMoney_1_en_play_al_all.jpg",
                     "tags": [
-                        "Cash Inc"
+                        "Cash Inc",
+                        "Hyper Casual"
                     ],
                     "priority": 0,
                     "link": "./games/inc_mip_EarnMoney_1_en_play_al_all.html"
@@ -300,9 +320,10 @@ let portfolioData = {
                     "description": "自动生成的页面截图: msp_mip_cokylin_coinmerge_02_real_na_noseason_en_99clk_na_al",
                     "image": "./imgs/msp_mip_cokylin_coinmerge_02_real_na_noseason_en_99clk_na_al.jpg",
                     "tags": [
-                        "Merge Sticker Playbook 2d"
+                        "Merge Sticker Playbook 2d",
+                        "Hyper Casual"
                     ],
-                    "priority": 9,
+                    "priority": 10,
                     "link": "./games/msp_mip_cokylin_coinmerge_02_real_na_noseason_en_99clk_na_al.html"
                 },
                 {
@@ -331,7 +352,8 @@ let portfolioData = {
                     "description": "自动生成的页面截图: tsl_mip_kylin_popupprop_1_en_play_al_all",
                     "image": "./imgs/tsl_mip_kylin_popupprop_1_en_play_al_all.jpg",
                     "tags": [
-                        "The Superhero League"
+                        "The Superhero League",
+                        "Casual"
                     ],
                     "priority": 0,
                     "link": "./games/tsl_mip_kylin_popupprop_1_en_play_al_all.html"
@@ -341,9 +363,10 @@ let portfolioData = {
                     "description": "自动生成的页面截图: tsl_mip_zombie_1_en_play_al_all",
                     "image": "./imgs/tsl_mip_zombie_1_en_play_al_all.jpg",
                     "tags": [
-                        "The Superhero League"
+                        "The Superhero League",
+                        "Casual"
                     ],
-                    "priority": 9,
+                    "priority": 10,
                     "link": "./games/tsl_mip_zombie_1_en_play_al_all.html"
                 },
                 {
@@ -351,9 +374,10 @@ let portfolioData = {
                     "description": "自动生成的页面截图: wc_mip_decoration_1_en_play_al_all",
                     "image": "./imgs/wc_mip_decoration_1_en_play_al_all.jpg",
                     "tags": [
-                        "Word Connect"
+                        "Word Connect",
+                        "Casual"
                     ],
-                    "priority": 0,
+                    "priority": 10,
                     "link": "./games/wc_mip_decoration_1_en_play_al_all.html"
                 },
                 {
@@ -371,7 +395,8 @@ let portfolioData = {
                     "description": "自动生成的页面截图: wss_mip_choosewhat_01_real_na_noseason_en_1clk_na_al",
                     "image": "./imgs/wss_mip_choosewhat_01_real_na_noseason_en_1clk_na_al.jpg",
                     "tags": [
-                        "Wordscapes Solitaire"
+                        "Wordscapes Solitaire",
+                        "Casual"
                     ],
                     "priority": 0,
                     "link": "./games/wss_mip_choosewhat_01_real_na_noseason_en_1clk_na_al.html"
@@ -381,7 +406,8 @@ let portfolioData = {
                     "description": "自动生成的页面截图: wss_mip_cokylin_bubbleboom_02_real_na_noseason_en_12clk_na_al",
                     "image": "./imgs/wss_mip_cokylin_bubbleboom_02_real_na_noseason_en_12clk_na_al.jpg",
                     "tags": [
-                        "Wordscapes Solitaire"
+                        "Wordscapes Solitaire",
+                        "Casual"
                     ],
                     "priority": 9,
                     "link": "./games/wss_mip_cokylin_bubbleboom_02_real_na_noseason_en_12clk_na_al.html"
@@ -391,7 +417,8 @@ let portfolioData = {
                     "description": "自动生成的页面截图: wss_mip_cokylin_crispdealing_01_real_na_noseason_en_50clk_na_al",
                     "image": "./imgs/wss_mip_cokylin_crispdealing_01_real_na_noseason_en_50clk_na_al.jpg",
                     "tags": [
-                        "Wordscapes Solitaire"
+                        "Wordscapes Solitaire",
+                        "Casual"
                     ],
                     "priority": 0,
                     "link": "./games/wss_mip_cokylin_crispdealing_01_real_na_noseason_en_50clk_na_al.html"
@@ -411,7 +438,8 @@ let portfolioData = {
                     "description": "自动生成的页面截图: mbl_mip_fullscreenmatchvo_1_en_play_al_all",
                     "image": "./imgs/mbl_mip_fullscreenmatchvo_1_en_play_al_all.jpg",
                     "tags": [
-                        "Match Ball 3d"
+                        "Match Ball 3d",
+                        "Casual"
                     ],
                     "priority": 9,
                     "link": "./games/mbl_mip_fullscreenmatchvo_1_en_play_al_all.html"
@@ -437,7 +465,8 @@ let portfolioData = {
                     "description": "自动生成的页面截图: doomsday-agent-team",
                     "image": "./imgs/doomsday-agent-team.jpg",
                     "tags": [
-                        "Rougelike"
+                        "Rougelike",
+                        "Hyper Casual"
                     ],
                     "priority": 9,
                     "link": "./games/doomsday-agent-team/index.html"
@@ -459,9 +488,10 @@ let portfolioData = {
                     "tags": [
                         "Rougelike",
                         "Parkour",
-                        "3D"
+                        "3D",
+                        "Hyper Casual"
                     ],
-                    "priority": 9,
+                    "priority": 10,
                     "link": "./games/fierce-battle-breakthrough/index.html"
                 },
                 {
@@ -470,7 +500,8 @@ let portfolioData = {
                     "image": "./imgs/music-ball.jpg",
                     "tags": [
                         "Parkour",
-                        "3D"
+                        "3D",
+                        "Hyper Casual"
                     ],
                     "priority": 0,
                     "link": "./games/music-ball/index.html"
@@ -480,7 +511,7 @@ let portfolioData = {
                     "description": "自动生成的页面截图: flying-knife-battle",
                     "image": "./imgs/flying-knife-battle.jpg",
                     "tags": [
-                        "Other"
+                        "Hyper Casual"
                     ],
                     "priority": 9,
                     "link": "./games/flying-knife-battle/index.html"
@@ -490,7 +521,7 @@ let portfolioData = {
                     "description": "自动生成的页面截图: joy-water-glass",
                     "image": "./imgs/joy-water-glass.jpg",
                     "tags": [
-                        "Other"
+                        "Hyper Casual"
                     ],
                     "priority": 0,
                     "link": "./games/joy-water-glass/index.html"
@@ -500,9 +531,10 @@ let portfolioData = {
                     "description": "自动生成的页面截图: happy-match",
                     "image": "./imgs/happy-match.jpg",
                     "tags": [
-                        "Match3"
+                        "Match3",
+                        "Casual"
                     ],
-                    "priority": 0,
+                    "priority": 10,
                     "link": "./games/happy-match/index.html"
                 },
                 {
@@ -510,7 +542,7 @@ let portfolioData = {
                     "description": "自动生成的页面截图: earn-a-mini-target",
                     "image": "./imgs/earn-a-mini-target.jpg",
                     "tags": [
-                        "Simulate"
+                        "Simulator"
                     ],
                     "priority": 9,
                     "link": "./games/earn-a-mini-target/index.html"
@@ -520,9 +552,9 @@ let portfolioData = {
                     "description": "自动生成的页面截图: jump-one-jump",
                     "image": "./imgs/jump-one-jump.jpg",
                     "tags": [
-                        "Other"
+                        "Hyper Casual"
                     ],
-                    "priority": 0,
+                    "priority": 10,
                     "link": "./games/jump-one-jump/index.html"
                 },
                 {
@@ -540,9 +572,10 @@ let portfolioData = {
                     "description": "自动生成的页面截图: eliminate-virus",
                     "image": "./imgs/eliminate-virus.jpg",
                     "tags": [
-                        "Rougelike"
+                        "Rougelike",
+                        "Hyper Casual"
                     ],
-                    "priority": 9,
+                    "priority": 10,
                     "link": "./games/eliminate-virus/index.html"
                 },
                 {
@@ -550,7 +583,8 @@ let portfolioData = {
                     "description": "自动生成的页面截图: cut-fruits",
                     "image": "./imgs/cut-fruits.jpg",
                     "tags": [
-                        "3D"
+                        "3D",
+                        "Hyper Casual"
                     ],
                     "priority": 0,
                     "link": "./games/cut-fruits/index.html"
@@ -561,7 +595,8 @@ let portfolioData = {
                     "image": "./imgs/ghost-shooter.jpg",
                     "tags": [
                         "Adventure",
-                        "3D"
+                        "3D",
+                        "Casual"
                     ],
                     "priority": 9,
                     "link": "./games/ghost-shooter/index.html"

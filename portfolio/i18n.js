@@ -1,0 +1,26 @@
+const i18n = {
+    "zh-cn": {
+        "title": "我的作品集展示",
+        "subtitle": "探索我的设计、开发和创新项目，每个项目都凝聚了我的热情与专业技能",
+        "searchPlaceholder": "搜索项目标题、描述或标签...",
+        "btnShowAll": "显示所有项目",
+        "btnShowRecommend": "显示推荐项目",
+        "footer": "© 2025 ### 个人作品集展示 | 精心制作，持续更新",
+        "itemCount": "### 个项目",
+        "noMatchedItems": "没有找到匹配的项目",
+        "tryDifferentSearch": "请尝试不同的搜索词或标签组合",
+        "itemPreview": "预览项目",
+    },
+    "en": {
+        "title": "My Portfolio",
+        "subtitle": "Explore my design, development, and innovation projects<br/>Each one embodies my passion and professional skills",
+        "searchPlaceholder": "Search by titles, descriptions and tags...",
+        "btnShowAll": "Show All",
+        "btnShowRecommend": "Show Recommend",
+        "footer": "© 2025 ### Portfolio | Carefully Drafted & Persistent Updated",
+        "itemCount": "### items",
+        "noMatchedItems": "No matched item",
+        "tryDifferentSearch": "Please try different search content or tag groups",
+        "itemPreview": "Play Now",
+    },
+};
