@@ -172,7 +172,7 @@ function createCardHTML(item) {
             <img src="${item.image}" alt="${item.title}" class="card-image">
             <div class="card-content">
                 <h3 class="card-title">${item.title}</h3>
-                <p class="card-description">${item.description}</p>
+                <p class="card-description">${item.description[lang]}</p>
                 <div class="card-tags">
                     ${item.tags.map(tag => `<span class="card-tag">${tag}</span>`).join('')}
                 </div>
