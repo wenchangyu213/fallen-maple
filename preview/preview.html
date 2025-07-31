@@ -12,7 +12,10 @@
             return url.searchParams.get(name);
         }
 
-        window.location.href = "../../preview/preview.html?name=th_mip_rescuefarmers";
+        const name = getUrlParam("name");
+        if (name != null && name != "") {
+            window.location.href = `./${name}/index.html`;
+        }
     </script>
 </body>
 </html>
