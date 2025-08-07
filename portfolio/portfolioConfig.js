@@ -4,6 +4,19 @@ let portfolioData = {
             "name": "可试玩 Playables",
             "items": [
                 {
+                    "title": "th_rescuefarmers",
+                    "description": {
+                        "zh-cn": "《王国之歌：英雄与征服》",
+                        "en": "自动生成的页面截图: th_mip_rescuefarmers"
+                    },
+                    "image": "./imgs/th_mip_rescuefarmers.jpg",
+                    "tags": [
+                        "Casual"
+                    ],
+                    "priority": 11,
+                    "link": "./games/th_mip_rescuefarmers/index.html"
+                },
+                {
                     "title": "arc_dragtoaim",
                     "description": {
                         "zh-cn": "《陆军指挥官》3D瞄准射击休闲游戏",
