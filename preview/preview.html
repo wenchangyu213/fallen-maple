@@ -4,19 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>自动跳转预览</title>
+    <script src="./app.min.js"></script>
 </head>
 <body>
-    <script>
-        function getUrlParam(name) {
-            const url = new URL(window.location.href);
-            return url.searchParams.get(name);
-        }
-
-        const name = getUrlParam("name");
-        if (name != null && name != "") {
-            window.location.href = `./${name}/index.html`;
-        }
-    </script>
 </body>
 </html>
     
