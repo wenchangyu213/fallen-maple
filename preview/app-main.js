@@ -1,125 +1,57 @@
-/**
- * 时间戳获取工具
- * 整合多个公开HTTP API服务，自动切换备份
- */
-class TimestampFetcher {
-    // 配置API列表，包含不同服务的请求信息和解析方法
-    static apiList = [
-        {
-            name: "苏宁易购",
-            url: "http://quan.suning.com/getSysTime.do",
-            method: "GET",
-            // 解析响应数据为时间戳(毫秒)
-            parser: (data) => {
-                // 苏宁返回格式: {"sysTime2": "2023-10-01 12:34:56","sysTime1": "20231001123456"}
-                return new Date(data.sysTime2).getTime();
-            }
-        },
-        {
-            name: "淘宝",
-            url: "http://api.m.taobao.com/rest/api3.do?api=mtop.common.getTimestamp",
-            method: "GET",
-            // 解析响应数据为时间戳(毫秒)
-            parser: (data) => {
-                // 淘宝返回格式: {"data": {"t": "1696123456789"}}
-                return parseInt(data.data.t, 10);
-            }
-        },
-        {
-            name: "Bitget",
-            url: "https://api.bitget.com/api/v2/public/time",
-            method: "GET",
-            // 解析响应数据为时间戳(毫秒)
-            parser: (data) => {
-                // Bitget返回格式: {"data": {"serverTime": "1696123456789"}}
-                return parseInt(data.data.serverTime, 10);
-            }
-        },
-        {
-            name: "WorldTimeAPI",
-            url: "https://worldtimeapi.org/api/ip",
-            method: "GET",
-            // 解析响应数据为时间戳(毫秒)
-            parser: (data) => {
-                // WorldTimeAPI返回格式: {"unixtime": 1696123456}
-                return data.unixtime * 1000;
-            }
-        }
-    ];
+async function fetchTencentTime() {
+    const apiUrl = 'http://vv.video.qq.com/checktime';
 
-    /**
-     * 获取当前标准时间戳
-     * @param {number} timeout 超时时间(毫秒)，默认5000
-     * @returns {Promise<number>} 时间戳(毫秒)
-     */
-    static async getTimestamp(timeout = 5000) {
-        // 依次尝试每个API，直到成功获取
-        for (const api of this.apiList) {
-            try {
-                console.log(`尝试从${api.name}获取时间...`);
-                const timestamp = await this.fetchFromApi(api, timeout);
-                console.log(`成功从${api.name}获取时间戳:`, timestamp);
-                return timestamp;
-            } catch (error) {
-                // console.log(`${api.name}请求失败:`, error.message);
-                // 继续尝试下一个API
-                continue;
-            }
-        }
-
-        // 所有API都失败时，返回本地时间戳作为备选
-        // console.warn("所有API请求失败，使用本地时间");
-        return -1;
-    }
-
-    /**
-     * 从单个API获取时间戳
-     * @param {Object} api API配置
-     * @param {number} timeout 超时时间
-     * @returns {Promise<number>} 时间戳
-     */
-    static async fetchFromApi(api, timeout) {
-        return new Promise((resolve, reject) => {
-            // 设置超时
-            const timer = setTimeout(() => {
-                reject(new Error(`请求超时(${timeout}ms)`));
-            }, timeout);
-
-            fetch(api.url, {
-                method: api.method,
-                mode: "cors",
-                cache: "no-cache"
-            })
-                .then(response => {
-                    clearTimeout(timer);
-                    if (!response.ok) {
-                        throw new Error(`HTTP错误，状态码: ${response.status}`);
-                    }
-                    return response.json();
-                })
-                .then(data => {
-                    try {
-                        const timestamp = api.parser(data);
-                        if (isNaN(timestamp) || timestamp <= 0) {
-                            throw new Error("解析时间戳失败");
-                        }
-                        resolve(timestamp);
-                    } catch (parseError) {
-                        reject(new Error(`数据解析错误: ${parseError.message}`));
-                    }
-                })
-                .catch(error => {
-                    clearTimeout(timer);
-                    reject(error);
-                });
+    try {
+        // 发送GET请求
+        const response = await fetch(apiUrl, {
+            method: 'GET',
+            mode: 'cors',
+            cache: 'no-cache'
         });
+
+        // 检查响应状态
+        if (!response.ok) {
+            throw new Error(`HTTP请求失败，状态码: ${response.status}`);
+        }
+
+        // 解析响应内容（腾讯的这个接口返回的是JSONP格式）
+        const text = await response.text();
+        console.log('腾讯时间API返回原始数据:', text);
+
+        const pRegex = /<t>(.*?)<\/t>/i;
+        const matchResult = text.match(pRegex);
+
+        // console.log('腾讯时间API返回原始数据1:', matchResult);
+        if (matchResult && matchResult[1]) {
+            console.log('t标签内容:', matchResult[1]); // 输出: 需要提取的内容
+
+            // console.log('腾讯时间API返回数据:', data);
+
+            // 提取时间信息（t字段需要转换为标准时间戳）
+            const tencentTime = matchResult[1];
+            // 腾讯的t值是10位时间戳（秒），转换为13位（毫秒）
+            const timestamp = tencentTime * 1000;
+            // const date = new Date(timestamp);
+
+            // console.log('转换的时间戳（秒）:', tencentTime);
+            console.log('转换后的时间戳（毫秒）:', timestamp);
+            // console.log('对应的时间:', date.toLocaleString());
+
+            return timestamp;
+        } else {
+            console.log('未找到p标签或p标签内容为空');
+        }
+        return null;
+    } catch (error) {
+        console.error('获取时间失败:', error.message);
+        return null;
     }
 }
 
-// 使用示例
+// 获取当前时间戳
 async function getCurrentTimestamp() {
     try {
-        const timestamp = await TimestampFetcher.getTimestamp();
+        const timestamp = await fetchTencentTime();
         console.log("当前标准时间戳(毫秒):", timestamp);
 
         // 可以在这里添加你的业务逻辑，例如验证链接时效性
