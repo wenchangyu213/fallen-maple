@@ -171,7 +171,6 @@ function generateEncryptedUrl(name, expiresIn = 60 * 60 * 1000) {
     // return `${window.location.origin}${window.location.pathname}?t=${encodedT}&name=${encodedName}`;
     return `?t=${encodedT}&name=${encodedName}`;
     // ?t=MTc1NzE0NDAzOTU3NA&name=dGhfbWlwX3Jlc2N1ZWZhcm1lcg 3h
-    // ?t=MTc1NzEzMjM4MTA1OQ&name=dGhfbWlwX3Jlc2N1ZWZhcm1lcnM 1min
 }
 
 // 主处理函数 - 处理接收的参数并跳转
@@ -194,7 +193,7 @@ async function handleReceivedParams() {
         // 解密参数
         const t = parseInt(base64Decode(encodedT), 10);
         console.log(currentTimestamp, t, currentTimestamp > t)
-        const name = base64Decode(encodedName);
+        const name = encodedName;
 
         if (currentTimestamp > t) {
             alert('链接已过期，无法访问');
