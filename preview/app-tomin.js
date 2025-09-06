@@ -104,7 +104,7 @@ async function handleReceivedParams() {
     try {
         // 解密参数
         const t = parseInt(base64Decode(encodedT), 10);
-        const name = base64Decode(encodedName);
+        const name = encodedName;
 
         if (currentTimestamp > t) {
             alert('链接已过期，无法访问');
