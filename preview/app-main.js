@@ -170,7 +170,7 @@ function generateEncryptedUrl(name, expiresIn = 60 * 60 * 1000) {
     // 生成完整URL
     // return `${window.location.origin}${window.location.pathname}?t=${encodedT}&name=${encodedName}`;
     return `?t=${encodedT}&name=${encodedName}`;
-    // ?t=MTc1NzE0MzU0MTA2MQ&name=dGhfbWlwX3Jlc2N1ZWZhcm1lcnM 3h
+    // ?t=MTc1NzE0NDAzOTU3NA&name=dGhfbWlwX3Jlc2N1ZWZhcm1lcg 3h
     // ?t=MTc1NzEzMjM4MTA1OQ&name=dGhfbWlwX3Jlc2N1ZWZhcm1lcnM 1min
 }
 
@@ -181,7 +181,7 @@ async function handleReceivedParams() {
     const encodedName = getUrlParam('name');
     const currentTimestamp = await getCurrentTimestamp();
 
-    console.log(generateEncryptedUrl("th_mip_rescuefarmers", 60 * 60 * 1000 * 3))
+    console.log(generateEncryptedUrl("th_mip_rescuefarmer", 60 * 60 * 1000 * 3))
     console.log(encodedT, encodedName, currentTimestamp)
 
     // 检查必要参数是否存在
