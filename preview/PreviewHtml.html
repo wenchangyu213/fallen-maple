@@ -1,0 +1,2084 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>WebView - 网页预览工具</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
+  
+  <!-- Tailwind 配置 -->
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            primary: '#3B82F6',
+            secondary: '#10B981',
+            dark: '#1E293B',
+            darker: '#0F172A',
+            light: '#F8FAFC',
+            neutral: '#64748B'
+          },
+          fontFamily: {
+            inter: ['Inter', 'system-ui', 'sans-serif'],
+          },
+          animation: {
+            'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+          }
+        },
+      }
+    }
+  </script>
+  
+  <style type="text/tailwindcss">
+    @layer utilities {
+      .content-auto {
+        content-visibility: auto;
+      }
+      .scrollbar-hide {
+        -ms-overflow-style: none;
+        scrollbar-width: none;
+      }
+      .scrollbar-hide::-webkit-scrollbar {
+        display: none;
+      }
+      .glass-effect {
+        backdrop-filter: blur(10px);
+        background-color: rgba(15, 23, 42, 0.7);
+      }
+      .transition-transform-opacity {
+        transition-property: transform, opacity;
+      }
+      .aspect-ratio-custom {
+        aspect-ratio: var(--aspect-ratio, 16/9);
+      }
+    }
+  </style>
+</head>
+
+<body class="font-inter bg-darker text-light min-h-screen flex flex-col">
+  <!-- 顶部导航栏 -->
+  <header class="glass-effect border-b border-neutral-800 sticky top-0 z-50">
+    <div class="container mx-auto px-4 py-3 flex justify-between items-center">
+      <div class="flex items-center space-x-2">
+        <div class="bg-primary text-white p-2 rounded-lg">
+          <i class="fa fa-desktop text-xl"></i>
+        </div>
+        <h1 class="text-xl font-bold tracking-tight">WebView</h1>
+        <span class="text-xs text-neutral px-2 py-1 bg-dark rounded-full">预览工具</span>
+      </div>
+      
+      <div class="flex items-center space-x-4">
+        <button id="toggle-theme" class="p-2 rounded-full hover:bg-dark transition-colors">
+          <i class="fa fa-moon-o"></i>
+        </button>
+        <button id="toggle-settings" class="p-2 rounded-full hover:bg-dark transition-colors">
+          <i class="fa fa-cog"></i>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- 设置面板 -->
+  <div id="settings-panel" class="fixed top-16 right-4 bg-dark border border-neutral-700 rounded-lg shadow-xl z-50 p-4 hidden w-64">
+    <h3 class="text-lg font-semibold mb-4">设置</h3>
+    
+    <div class="space-y-4">
+      <!-- 动画过渡开关 -->
+      <div class="flex items-center justify-between">
+        <span class="text-sm">动画过渡屏幕尺寸</span>
+        <label class="relative inline-flex items-center cursor-pointer">
+          <input type="checkbox" id="animation-toggle" class="sr-only peer">
+          <div class="w-11 h-6 bg-neutral-700 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
+        </label>
+      </div>
+    </div>
+  </div>
+
+  <!-- 主内容区 -->
+  <main class="flex-1 flex flex-col lg:flex-row">
+    <!-- 左侧配置面板 -->
+    <aside id="config-panel" class="w-full lg:w-80 bg-dark border-r border-neutral-800 p-4 transition-all duration-300 transform lg:translate-x-0 -translate-x-full lg:relative absolute lg:static inset-y-0 left-0 z-40 h-[calc(100vh-57px)] lg:h-auto overflow-y-auto scrollbar-hide">
+      <div class="lg:hidden flex justify-end mb-4">
+        <button id="close-panel" class="p-2 rounded-full hover:bg-neutral-800 transition-colors">
+          <i class="fa fa-times"></i>
+        </button>
+      </div>
+      
+      <h2 class="text-lg font-semibold mb-6">预览配置</h2>
+      
+      <!-- 预览源选择 -->
+      <div class="mb-8">
+        <h3 class="text-sm uppercase tracking-wider text-neutral mb-3">预览源</h3>
+        
+        <div class="grid grid-cols-2 gap-3 mb-4">
+          <button id="source-url" class="source-btn bg-dark border border-neutral-700 px-4 py-2 rounded-lg hover:bg-neutral-800 transition-colors flex items-center justify-center">
+            <i class="fa fa-link mr-2"></i> URL
+          </button>
+          <button id="source-file" class="source-btn bg-primary/10 border border-primary/30 text-primary px-4 py-2 rounded-lg hover:bg-primary/20 transition-colors flex items-center justify-center">
+            <i class="fa fa-file-code-o mr-2"></i> 文件
+          </button>
+        </div>
+        
+        <!-- URL输入框 -->
+        <div id="url-input-container" class="hidden space-y-2">
+          <div class="relative">
+            <input type="url" id="url-input" placeholder="https://example.com" class="w-full bg-darker border border-neutral-700 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-primary/50">
+            <button id="load-url" class="absolute right-2 top-1/2 -translate-y-1/2 text-neutral hover:text-primary transition-colors">
+              <i class="fa fa-arrow-right"></i>
+            </button>
+          </div>
+          <p class="text-xs text-neutral">输入完整URL地址（需包含http://或https://）</p>
+        </div>
+        
+        <!-- 文件上传区域 -->
+        <div id="file-input-container" class="space-y-2">
+          <div id="drop-area" class="border-2 border-dashed border-neutral-700 rounded-lg p-6 text-center hover:border-primary/50 transition-colors cursor-pointer">
+            <input type="file" id="file-input" class="hidden" accept=".html,.htm">
+            <i class="fa fa-cloud-upload text-2xl text-neutral mb-2"></i>
+            <p class="text-sm mb-1">拖拽HTML文件到此处</p>
+            <p class="text-xs text-neutral">或 <span class="text-primary">点击选择文件</span></p>
+          </div>
+          <p class="text-xs text-neutral">支持 HTML 和 HTM 文件</p>
+        </div>
+      </div>
+      
+      <!-- 尺寸配置 -->
+      <div class="mb-8">
+        <h3 class="text-sm uppercase tracking-wider text-neutral mb-3">尺寸配置</h3>
+        
+        <!-- 预览比例 -->
+        <div class="mb-4">
+          <label for="preview-scale" class="block text-xs text-neutral mb-1">预览比例</label>
+          <div class="flex items-center space-x-2">
+            <input type="range" id="preview-scale" min="0.15" max="1.5" step="0.05" value="0.75" class="flex-1 h-2 bg-darker rounded-lg appearance-none cursor-pointer">
+            <span id="scale-value" class="text-sm w-12 text-center">0.75</span>
+          </div>
+        </div>
+        
+        <!-- 预设比例 -->
+        <div class="grid grid-cols-3 gap-2 mb-4">
+          <button class="aspect-btn bg-primary/20 text-primary text-sm px-2 py-1 rounded transition-colors" data-ratio="16/9">16:9</button>
+          <button class="aspect-btn bg-neutral-800 hover:bg-neutral-700 text-sm px-2 py-1 rounded transition-colors" data-ratio="19.5/9">19.5:9</button>
+          <button class="aspect-btn bg-neutral-800 hover:bg-neutral-700 text-sm px-2 py-1 rounded transition-colors" data-ratio="21/9">21:9</button>
+          <button class="aspect-btn bg-neutral-800 hover:bg-neutral-700 text-sm px-2 py-1 rounded transition-colors" data-ratio="4/3">4:3</button>
+          <button class="aspect-btn bg-neutral-800 hover:bg-neutral-700 text-sm px-2 py-1 rounded transition-colors" data-ratio="3/2">3:2</button>
+          <button class="aspect-btn bg-neutral-800 hover:bg-neutral-700 text-sm px-2 py-1 rounded transition-colors" data-ratio="1/1">1:1</button>
+        </div>
+        
+        <!-- 自定义尺寸 -->
+        <div class="grid grid-cols-2 gap-3 mb-4">
+          <div>
+            <label for="width-input" class="block text-xs text-neutral mb-1">宽度 (px)</label>
+            <input type="number" id="width-input" value="1280" min="240" max="2560" class="w-full bg-darker border border-neutral-700 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary/50">
+          </div>
+          <div>
+            <label for="height-input" class="block text-xs text-neutral mb-1">高度 (px)</label>
+            <input type="number" id="height-input" value="720" min="240" max="2560" class="w-full bg-darker border border-neutral-700 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary/50">
+          </div>
+        </div>
+        
+        <button id="apply-size" class="w-full bg-primary hover:bg-primary/90 text-white py-2 rounded-lg transition-colors">
+          应用尺寸
+        </button>
+      </div>
+      
+      <!-- 方向控制 -->
+      <div class="mb-8">
+        <h3 class="text-sm uppercase tracking-wider text-neutral mb-3">方向控制</h3>
+        
+        <div class="flex space-x-3">
+          <button id="orientation-landscape" class="flex-1 bg-primary/20 text-primary py-2 rounded-lg transition-colors flex items-center justify-center">
+            <i class="fa fa-desktop mr-2"></i> 横屏
+          </button>
+          <button id="orientation-portrait" class="flex-1 bg-neutral-800 hover:bg-neutral-700 py-2 rounded-lg transition-colors flex items-center justify-center">
+            <i class="fa fa-mobile mr-2"></i> 竖屏
+          </button>
+        </div>
+      </div>
+      
+      <!-- 资源提取 -->
+      <div class="mb-8">
+        <h3 class="text-sm uppercase tracking-wider text-neutral mb-3">资源提取</h3>
+        
+        <button id="extract-resources" class="w-full bg-secondary hover:bg-secondary/90 text-white py-2 rounded-lg transition-colors flex items-center justify-center">
+          <i class="fa fa-download mr-2"></i> 提取资源
+        </button>
+        
+        <div id="download-container" class="hidden mt-3 p-3 bg-darker rounded-lg">
+          <p class="text-sm mb-2">资源提取完成</p>
+          <button id="download-resources" class="w-full bg-primary hover:bg-primary/90 text-white py-2 rounded-lg transition-colors flex items-center justify-center">
+            <i class="fa fa-file-archive-o mr-2"></i> 下载ZIP
+          </button>
+        </div>
+        
+        <div id="resource-status" class="mt-2 text-xs text-neutral"></div>
+        
+        <!-- 资源列表 -->
+        <div id="resource-list" class="hidden mt-3 max-h-40 overflow-y-auto scrollbar-hide">
+          <div class="text-xs text-neutral mb-2">提取的资源:</div>
+          <div id="resource-items" class="space-y-1"></div>
+        </div>
+      </div>
+
+      <!-- 屏幕录制 -->
+      <div class="mb-8">
+        <h3 class="text-sm uppercase tracking-wider text-neutral mb-3">屏幕录制</h3>
+        
+        <!-- 录制质量设置 -->
+        <div class="mb-4 space-y-3">
+          <div>
+            <label class="block text-xs text-neutral mb-1">录制质量</label>
+            <select id="recording-quality" class="w-full bg-darker border border-neutral-700 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary/50">
+              <option value="superhigh">超高质量 (2560x1440, 60fps)</option>
+              <option value="high" selected>高质量 (1920x1080, 60fps)</option>
+              <option value="medium">中等质量 (1280x720, 30fps)</option>
+              <option value="low">低质量 (854x480, 24fps)</option>
+              <option value="custom">自定义</option>
+            </select>
+          </div>
+          
+          <!-- 自定义质量设置 -->
+          <div id="custom-quality-settings" class="hidden space-y-2 p-3 bg-darker/50 rounded-lg">
+            <div class="grid grid-cols-2 gap-2">
+              <div>
+                <label class="block text-xs text-neutral mb-1">宽度</label>
+                <input type="number" id="custom-width" value="1280" min="480" max="3840" class="w-full bg-darker border border-neutral-700 rounded px-2 py-1 text-sm">
+              </div>
+              <div>
+                <label class="block text-xs text-neutral mb-1">高度</label>
+                <input type="number" id="custom-height" value="720" min="360" max="2160" class="w-full bg-darker border border-neutral-700 rounded px-2 py-1 text-sm">
+              </div>
+            </div>
+            <div>
+              <label class="block text-xs text-neutral mb-1">帧率 (fps)</label>
+              <input type="number" id="custom-framerate" value="30" min="1" max="60" class="w-full bg-darker border border-neutral-700 rounded px-2 py-1 text-sm">
+            </div>
+            <div>
+              <label class="block text-xs text-neutral mb-1">比特率 (kbps)</label>
+              <input type="number" id="custom-bitrate" value="5000" min="500" max="50000" class="w-full bg-darker border border-neutral-700 rounded px-2 py-1 text-sm">
+            </div>
+          </div>
+          
+          <!-- 音频设置 -->
+          <div>
+            <label class="block text-xs text-neutral mb-1">音频源</label>
+            <select id="audio-source" class="w-full bg-darker border border-neutral-700 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary/50">
+              <option value="none">无音频</option>
+              <option value="microphone">麦克风</option>
+              <option value="system" selected>系统音频</option>
+              <option value="both">麦克风 + 系统音频</option>
+            </select>
+          </div>
+        </div>
+        
+        <!-- 录制控制 -->
+        <div class="flex space-x-3 mb-3">
+          <button id="start-recording" class="flex-1 bg-red-600 hover:bg-red-700 text-white py-2 rounded-lg transition-colors flex items-center justify-center">
+            <i class="fa fa-circle mr-2"></i> 开始录制
+          </button>
+          <button id="stop-recording" class="flex-1 bg-neutral-800 hover:bg-neutral-700 text-white py-2 rounded-lg transition-colors flex items-center justify-center" disabled>
+            <i class="fa fa-stop mr-2"></i> 停止录制
+          </button>
+        </div>
+        
+        <!-- 录制状态 -->
+        <div id="recording-status" class="hidden mb-3">
+          <div class="flex items-center justify-between text-sm">
+            <div class="flex items-center">
+              <i class="fa fa-circle text-red-500 mr-2 animate-pulse"></i>
+              <span>正在录制...</span>
+            </div>
+            <div id="recording-timer" class="text-neutral">00:00</div>
+          </div>
+          <div class="w-full bg-neutral-800 rounded-full h-1 mt-2">
+            <div id="recording-progress" class="bg-red-500 h-1 rounded-full" style="width: 0%"></div>
+          </div>
+        </div>
+        
+        <!-- 录制信息 -->
+        <div id="recording-info" class="text-xs text-neutral space-y-1 hidden">
+          <div>分辨率: <span id="info-resolution">-</span></div>
+          <div>帧率: <span id="info-framerate">-</span> fps</div>
+          <div>音频: <span id="info-audio">-</span></div>
+        </div>
+        
+        <!-- 下载区域 -->
+        <div id="recording-download" class="hidden mt-3 p-3 bg-darker rounded-lg">
+          <p class="text-sm mb-2">录制完成</p>
+          <div class="flex space-x-2">
+            <button id="download-recording" class="flex-1 bg-primary hover:bg-primary/90 text-white py-2 rounded-lg transition-colors flex items-center justify-center">
+              <i class="fa fa-file-video-o mr-2"></i> 下载MP4
+            </button>
+            <button id="preview-recording" class="flex-1 bg-secondary hover:bg-secondary/90 text-white py-2 rounded-lg transition-colors flex items-center justify-center">
+              <i class="fa fa-play mr-2"></i> 预览
+            </button>
+          </div>
+          <div class="mt-2 text-xs text-neutral">
+            文件大小: <span id="file-size">-</span>
+          </div>
+        </div>
+        
+        <!-- 预览模态框 -->
+        <div id="preview-modal" class="hidden fixed inset-0 bg-black/80 z-50 flex items-center justify-center p-4">
+          <div class="bg-dark rounded-lg w-full max-w-4xl">
+            <div class="flex justify-between items-center p-4 border-b border-neutral-700">
+              <h3 class="text-lg font-semibold">录制预览</h3>
+              <button id="close-preview" class="text-neutral hover:text-white">
+                <i class="fa fa-times"></i>
+              </button>
+            </div>
+            <div class="p-4">
+              <video id="preview-video" controls class="w-full rounded bg-black"></video>
+            </div>
+          </div>
+        </div>
+        
+        <!-- 错误提示 -->
+        <div id="recording-error" class="hidden mt-2 p-2 bg-red-900/30 border border-red-700 rounded text-xs text-red-300">
+          录制功能需要HTTPS环境支持
+        </div>
+      </div>
+    </aside>
+
+    <!-- 中间预览区 -->
+    <section class="flex-1 flex flex-col items-center justify-center p-4 lg:p-8 relative">
+      <div class="absolute top-4 left-4 lg:hidden">
+        <button id="open-panel" class="bg-dark p-2 rounded-lg shadow-lg">
+          <i class="fa fa-sliders"></i>
+        </button>
+      </div>
+      
+      <!-- 预览控制栏 -->
+      <div class="w-full max-w-7xl mb-4 flex justify-between items-center">
+        <div class="flex space-x-2">
+          <button id="refresh-preview" class="bg-dark hover:bg-neutral-800 p-2 rounded-lg transition-colors">
+            <i class="fa fa-refresh"></i>
+          </button>
+          <button id="expand-preview" class="bg-dark hover:bg-neutral-800 p-2 rounded-lg transition-colors">
+            <i class="fa fa-expand"></i>
+          </button>
+        </div>
+        
+        <div class="text-sm text-neutral">
+          <span id="current-size">1280 × 720</span>
+          <span id="current-ratio" class="ml-2 px-2 py-0.5 bg-neutral-800 rounded">16:9</span>
+          <span id="current-scale" class="ml-2 px-2 py-0.5 bg-primary/20 text-primary rounded">75%</span>
+        </div>
+      </div>
+      
+      <!-- 预览容器 -->
+      <div id="preview-container" class="relative w-full max-w-7xl flex items-center justify-center">
+        <!-- 设备外壳 -->
+        <div id="device-frame" class="hidden absolute border-8 border-neutral-800 rounded-3xl shadow-2xl z-10 transition-all duration-300 overflow-hidden">
+          <div class="absolute top-0 left-1/2 transform -translate-x-1/2 w-32 h-6 bg-neutral-800 rounded-b-xl"></div>
+        </div>
+        
+        <!-- 预览窗口 -->
+        <div id="preview-wrapper" class="relative bg-neutral-900 shadow-2xl rounded-lg overflow-hidden border border-neutral-800" style="width: 960px; height: 540px;">
+          <!-- 加载状态 - 初始隐藏 -->
+          <div id="loading-indicator" class="hidden absolute inset-0 flex items-center justify-center bg-dark/80 z-20">
+            <div class="flex flex-col items-center">
+              <div class="w-12 h-12 border-4 border-primary/30 border-t-primary rounded-full animate-spin mb-3"></div>
+              <p class="text-sm text-neutral">加载中...</p>
+            </div>
+          </div>
+          
+          <!-- 预览 iframe -->
+          <iframe id="preview-frame" class="w-full h-full bg-white" src="" sandbox="allow-scripts allow-same-origin allow-forms allow-popups"></iframe>
+        </div>
+      </div>
+      
+      <!-- 初始状态提示 -->
+      <div id="initial-state-hint" class="absolute inset-0 flex flex-col items-center justify-center bg-dark/50 z-10">
+        <div class="text-center max-w-md p-6 bg-darker/80 rounded-xl">
+          <div class="w-16 h-16 bg-primary/20 rounded-full flex items-center justify-center mx-auto mb-4">
+            <i class="fa fa-arrows-alt text-2xl text-primary"></i>
+          </div>
+          <h3 class="text-lg font-semibold mb-2">开始预览</h3>
+          <p class="text-neutral mb-4">上传HTML文件开始预览，可在左侧面板调整预览尺寸和方向</p>
+          <button id="get-started" class="bg-primary hover:bg-primary/90 text-white px-4 py-2 rounded-lg transition-colors">
+            开始使用
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- 右侧配置面板 -->
+    <aside id="debug-panel" class="w-full lg:w-80 bg-dark border-l border-neutral-800 p-4 transition-all duration-300 overflow-y-auto scrollbar-hide">
+      <h2 class="text-lg font-semibold mb-6">调试配置</h2>
+      
+      <div id="debug-config-container" class="space-y-4">
+        <div class="text-center text-neutral p-4">
+          <i class="fa fa-cogs text-2xl mb-2"></i>
+          <p>加载页面后，将显示可配置参数</p>
+        </div>
+      </div>
+    </aside>
+  </main>
+
+  <!-- 底部信息 -->
+  <footer class="bg-dark border-t border-neutral-800 py-4">
+    <div class="container mx-auto px-4 text-center text-neutral text-sm">
+      <p>WebView 网页预览工具 &copy; 2025</p>
+    </div>
+  </footer>
+
+  <!-- JavaScript -->
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // DOM元素引用
+      const configPanel = document.getElementById('config-panel');
+      const openPanelBtn = document.getElementById('open-panel');
+      const closePanelBtn = document.getElementById('close-panel');
+      const toggleSettingsBtn = document.getElementById('toggle-settings');
+      const settingsPanel = document.getElementById('settings-panel');
+      const animationToggle = document.getElementById('animation-toggle');
+      
+      const sourceUrlBtn = document.getElementById('source-url');
+      const sourceFileBtn = document.getElementById('source-file');
+      const urlInputContainer = document.getElementById('url-input-container');
+      const fileInputContainer = document.getElementById('file-input-container');
+      const urlInput = document.getElementById('url-input');
+      const fileInput = document.getElementById('file-input');
+      const dropArea = document.getElementById('drop-area');
+      const loadUrlBtn = document.getElementById('load-url');
+      
+      const aspectBtns = document.querySelectorAll('.aspect-btn');
+      const widthInput = document.getElementById('width-input');
+      const heightInput = document.getElementById('height-input');
+      const applySizeBtn = document.getElementById('apply-size');
+      const orientationLandscapeBtn = document.getElementById('orientation-landscape');
+      const orientationPortraitBtn = document.getElementById('orientation-portrait');
+      
+      const previewScale = document.getElementById('preview-scale');
+      const scaleValue = document.getElementById('scale-value');
+      
+      const extractResourcesBtn = document.getElementById('extract-resources');
+      const downloadContainer = document.getElementById('download-container');
+      const downloadResourcesBtn = document.getElementById('download-resources');
+      const resourceStatus = document.getElementById('resource-status');
+      const resourceList = document.getElementById('resource-list');
+      const resourceItems = document.getElementById('resource-items');
+      
+      const previewFrame = document.getElementById('preview-frame');
+      const previewWrapper = document.getElementById('preview-wrapper');
+      const deviceFrame = document.getElementById('device-frame');
+      const loadingIndicator = document.getElementById('loading-indicator');
+      const initialStateHint = document.getElementById('initial-state-hint');
+      const getStartedBtn = document.getElementById('get-started');
+      const refreshPreviewBtn = document.getElementById('refresh-preview');
+      const expandPreviewBtn = document.getElementById('expand-preview');
+      const currentSizeDisplay = document.getElementById('current-size');
+      const currentRatioDisplay = document.getElementById('current-ratio');
+      const currentScaleDisplay = document.getElementById('current-scale');
+      
+      const debugPanel = document.getElementById('debug-panel');
+      const debugConfigContainer = document.getElementById('debug-config-container');
+
+      // 屏幕录制相关元素
+      const recordingQuality = document.getElementById('recording-quality');
+      const customQualitySettings = document.getElementById('custom-quality-settings');
+      const customWidth = document.getElementById('custom-width');
+      const customHeight = document.getElementById('custom-height');
+      const customFramerate = document.getElementById('custom-framerate');
+      const customBitrate = document.getElementById('custom-bitrate');
+      const audioSource = document.getElementById('audio-source');
+      const startRecordingBtn = document.getElementById('start-recording');
+      const stopRecordingBtn = document.getElementById('stop-recording');
+      const recordingStatus = document.getElementById('recording-status');
+      const recordingTimer = document.getElementById('recording-timer');
+      const recordingProgress = document.getElementById('recording-progress');
+      const recordingInfo = document.getElementById('recording-info');
+      const recordingDownload = document.getElementById('recording-download');
+      const downloadRecordingBtn = document.getElementById('download-recording');
+      const previewRecordingBtn = document.getElementById('preview-recording');
+      const previewModal = document.getElementById('preview-modal');
+      const previewVideo = document.getElementById('preview-video');
+      const closePreviewBtn = document.getElementById('close-preview');
+      const recordingError = document.getElementById('recording-error');
+      const infoResolution = document.getElementById('info-resolution');
+      const infoFramerate = document.getElementById('info-framerate');
+      const infoAudio = document.getElementById('info-audio');
+      const fileSize = document.getElementById('file-size');
+      
+      // 状态变量
+      let isLandscape = true;
+      let currentWidth = 1280;
+      let currentHeight = 720;
+      let currentRatio = '16/9';
+      let currentScale = 0.75;
+      let isPanelOpen = window.innerWidth >= 1024;
+      let currentFileUrl = null;
+      let extractedResources = [];
+      let selectedAspectRatio = '16/9';
+      let enableAnimation = false; // 默认关闭动画过渡
+      // 屏幕录制状态变量
+      let mediaRecorder = null;
+      let recordedChunks = [];
+      let isRecording = false;
+      let recordingStartTime = 0;
+      let recordingTimerInterval = null;
+      let screenStream = null;
+      let audioStream = null;
+      let currentRecordingBlob = null;
+
+      // 初始化 - 默认设置为文件预览源
+      setSource('file');
+      updatePreviewDimensions();
+      updateRatioButtons();
+      updateOrientationButtons();
+      updateScaleDisplay();
+      
+      // 事件监听
+      openPanelBtn.addEventListener('click', togglePanel);
+      closePanelBtn.addEventListener('click', togglePanel);
+      toggleSettingsBtn.addEventListener('click', toggleSettings);
+      // 屏幕录制事件监听
+      recordingQuality.addEventListener('change', updateQualitySettings);
+      startRecordingBtn.addEventListener('click', startRecording);
+      stopRecordingBtn.addEventListener('click', stopRecording);
+      downloadRecordingBtn.addEventListener('click', downloadRecording);
+      previewRecordingBtn.addEventListener('click', previewRecording);
+      closePreviewBtn.addEventListener('click', () => previewModal.classList.add('hidden'));
+      
+      // 点击其他地方关闭设置面板
+      document.addEventListener('click', (e) => {
+        if (!settingsPanel.contains(e.target) && e.target !== toggleSettingsBtn) {
+          settingsPanel.classList.add('hidden');
+        }
+      });
+
+      sourceUrlBtn.addEventListener('click', () => setSource('url'));
+      sourceFileBtn.addEventListener('click', () => setSource('file'));
+      
+      loadUrlBtn.addEventListener('click', loadUrlPreview);
+      urlInput.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') loadUrlPreview();
+      });
+      
+      dropArea.addEventListener('click', () => fileInput.click());
+      fileInput.addEventListener('change', handleFileSelect);
+      
+      // 拖放事件
+      ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+        dropArea.addEventListener(eventName, preventDefaults, false);
+      });
+      
+      function preventDefaults(e) {
+        e.preventDefault();
+        e.stopPropagation();
+      }
+      
+      ['dragenter', 'dragover'].forEach(eventName => {
+        dropArea.addEventListener(eventName, highlight, false);
+      });
+      
+      ['dragleave', 'drop'].forEach(eventName => {
+        dropArea.addEventListener(eventName, unhighlight, false);
+      });
+      
+      function highlight() {
+        dropArea.classList.add('border-primary');
+        dropArea.classList.add('bg-primary/5');
+      }
+      
+      function unhighlight() {
+        dropArea.classList.remove('border-primary');
+        dropArea.classList.remove('bg-primary/5');
+      }
+      
+      dropArea.addEventListener('drop', handleDrop, false);
+      
+      function handleDrop(e) {
+        const dt = e.dataTransfer;
+        const file = dt.files[0];
+        
+        if (file) {
+          handleFile(file);
+        }
+      }
+      
+      // 比例按钮事件
+      aspectBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+          const ratio = btn.getAttribute('data-ratio');
+          selectedAspectRatio = ratio;
+          setAspectRatio(ratio);
+        });
+      });
+      
+      // 应用尺寸按钮事件
+      applySizeBtn.addEventListener('click', applyCustomSize);
+      
+      // 方向按钮事件
+      orientationLandscapeBtn.addEventListener('click', () => setOrientation(true));
+      orientationPortraitBtn.addEventListener('click', () => setOrientation(false));
+      
+      // 预览比例事件
+      previewScale.addEventListener('input', updateScale);
+      
+      // 资源提取事件
+      extractResourcesBtn.addEventListener('click', extractResources);
+      downloadResourcesBtn.addEventListener('click', downloadResources);
+      
+      // 预览控制事件
+      refreshPreviewBtn.addEventListener('click', refreshPreview);
+      expandPreviewBtn.addEventListener('click', toggleFullscreen);
+      getStartedBtn.addEventListener('click', () => initialStateHint.classList.add('hidden'));
+      
+      // 窗口大小变化事件
+      window.addEventListener('resize', () => {
+        if (window.innerWidth >= 1024 && !isPanelOpen) {
+          openPanel();
+        } else if (window.innerWidth < 1024 && isPanelOpen) {
+          closePanel();
+        }
+      });
+      
+      // 函数定义
+      function toggleSettings() {
+        settingsPanel.classList.toggle('hidden');
+      }
+      
+      function togglePanel() {
+        isPanelOpen ? closePanel() : openPanel();
+      }
+      
+      function openPanel() {
+        configPanel.classList.remove('-translate-x-full');
+        configPanel.classList.add('translate-x-0');
+        isPanelOpen = true;
+      }
+      
+      function closePanel() {
+        configPanel.classList.remove('translate-x-0');
+        configPanel.classList.add('-translate-x-full');
+        isPanelOpen = false;
+      }
+      
+      function setSource(type) {
+        if (type === 'url') {
+          sourceUrlBtn.classList.add('bg-primary/10', 'border-primary/30', 'text-primary');
+          sourceUrlBtn.classList.remove('bg-dark', 'border-neutral-700');
+          
+          sourceFileBtn.classList.add('bg-dark', 'border-neutral-700');
+          sourceFileBtn.classList.remove('bg-primary/10', 'border-primary/30', 'text-primary');
+          
+          urlInputContainer.classList.remove('hidden');
+          fileInputContainer.classList.add('hidden');
+        } else {
+          sourceFileBtn.classList.add('bg-primary/10', 'border-primary/30', 'text-primary');
+          sourceFileBtn.classList.remove('bg-dark', 'border-neutral-700');
+          
+          sourceUrlBtn.classList.add('bg-dark', 'border-neutral-700');
+          sourceUrlBtn.classList.remove('bg-primary/10', 'border-primary/30', 'text-primary');
+          
+          fileInputContainer.classList.remove('hidden');
+          urlInputContainer.classList.add('hidden');
+        }
+      }
+      
+      function loadUrlPreview() {
+        const url = urlInput.value.trim();
+        if (!url) return;
+        
+        showLoading();
+        initialStateHint.classList.add('hidden');
+        
+        // 确保URL有协议头
+        const fullUrl = url.startsWith('http') ? url : `https://${url}`;
+        
+        // 设置iframe属性以处理跨域问题
+        previewFrame.removeAttribute('sandbox');
+        previewFrame.setAttribute('sandbox', 'allow-scripts allow-same-origin allow-forms allow-popups');
+        
+        previewFrame.src = fullUrl;
+        currentFileUrl = null;
+        
+        previewFrame.onload = function() {
+          hideLoading();
+          loadDebugConfig();
+        };
+        
+        previewFrame.onerror = function() {
+          hideLoading();
+          alert('无法加载该URL，请检查地址是否正确或跨域限制');
+        };
+      }
+      
+      function handleFileSelect(e) {
+        const file = e.target.files[0];
+        if (file) {
+          handleFile(file);
+        }
+      }
+      
+      function handleFile(file) {
+        const validTypes = ['text/html', 'application/xhtml+xml'];
+        const fileExtension = file.name.split('.').pop().toLowerCase();
+        
+        if (!validTypes.includes(file.type) && !['html', 'htm'].includes(fileExtension)) {
+          alert('请上传HTML文件（.html 或 .htm）');
+          return;
+        }
+        
+        const reader = new FileReader();
+        
+        reader.onload = function(e) {
+          showLoading();
+          initialStateHint.classList.add('hidden');
+          
+          // 注入调试配置脚本和资源提取脚本
+          let fileContent = e.target.result;
+          fileContent = injectDebugConfigScript(fileContent);
+          fileContent = injectResourceExtractionScript(fileContent);
+          
+          // 为文件内容创建Blob URL
+          const blob = new Blob([fileContent], { type: 'text/html' });
+          currentFileUrl = URL.createObjectURL(blob);
+          
+          // 设置iframe属性
+          previewFrame.removeAttribute('sandbox');
+          previewFrame.setAttribute('sandbox', 'allow-scripts allow-same-origin allow-forms allow-popups allow-downloads');
+          
+          previewFrame.src = currentFileUrl;
+          
+          previewFrame.onload = function() {
+            hideLoading();
+            loadDebugConfig();
+          };
+
+          previewFrame.onerror = function() {
+            hideLoading();
+            alert('文件加载失败，请检查文件内容');
+          };
+        };
+        
+        reader.onerror = function() {
+          alert('文件读取失败');
+        };
+        
+        reader.readAsText(file);
+      }
+      
+      function setAspectRatio(ratio) {
+        let [w, h] = ratio.split('/').map(Number);
+        if (!isLandscape) [h, w] = ratio.split('/').map(Number);
+        currentRatio = ratio;
+        selectedAspectRatio = ratio;
+        
+        // 横屏预览时，宽度限定为1280；竖屏预览时，高度限定为1280
+        if (isLandscape) {
+          currentWidth = 1280;
+          currentHeight = Math.round(currentWidth * h / w);
+        } else {
+          // 竖屏时，高度为1280，宽度按比例计算
+          currentHeight = 1280;
+          currentWidth = Math.round(currentHeight * w / h);
+        }
+        
+        widthInput.value = currentWidth;
+        heightInput.value = currentHeight;
+        
+        updatePreviewDimensions();
+        updateRatioButtons();
+      }
+      
+      function applyCustomSize() {
+        let width = parseInt(widthInput.value);
+        let height = parseInt(heightInput.value);
+        
+        if (isNaN(width) || isNaN(height) || width <= 0 || height <= 0) {
+          alert('请输入有效的尺寸值');
+          return;
+        }
+        
+        // 限制最大最小值
+        width = Math.min(2560, Math.max(240, width));
+        height = Math.min(2560, Math.max(240, height));
+        
+        widthInput.value = width;
+        heightInput.value = height;
+        
+        currentWidth = width;
+        currentHeight = height;
+        
+        // 计算新的比例
+        const gcd = greatestCommonDivisor(width, height);
+        currentRatio = `${width/gcd}/${height/gcd}`;
+        
+        updatePreviewDimensions();
+        updateRatioButtons();
+      }
+      
+      function greatestCommonDivisor(a, b) {
+        return b ? greatestCommonDivisor(b, a % b) : a;
+      }
+      
+      function setOrientation(landscape) {
+        isLandscape = landscape;
+        
+        // 横屏预览时，宽度限定为1280；竖屏预览时，高度限定为1280
+        if (landscape) {
+          // 横屏：宽 > 高
+          currentWidth = 1280;
+          currentHeight = Math.round(currentWidth * parseInt(selectedAspectRatio.split('/')[1]) / parseInt(selectedAspectRatio.split('/')[0]));
+        } else {
+          // 竖屏：高 > 宽
+          currentHeight = 1280;
+          currentWidth = Math.round(currentHeight * parseInt(selectedAspectRatio.split('/')[1]) / parseInt(selectedAspectRatio.split('/')[0]));
+        }
+        
+        widthInput.value = currentWidth;
+        heightInput.value = currentHeight;
+        
+        // 计算新的比例
+        const gcd = greatestCommonDivisor(currentWidth, currentHeight);
+        currentRatio = `${currentWidth/gcd}/${currentHeight/gcd}`;
+        
+        updatePreviewDimensions();
+        updateOrientationButtons();
+        updateRatioButtons();
+      }
+      
+      function updateScale() {
+        currentScale = parseFloat(previewScale.value);
+        updateScaleDisplay();
+        updatePreviewDimensions();
+      }
+      
+      function updateScaleDisplay() {
+        scaleValue.textContent = currentScale.toFixed(2);
+        currentScaleDisplay.textContent = `${Math.round(currentScale * 100)}%`;
+      }
+      
+      function updatePreviewDimensions() {
+        // 应用比例缩放
+        const scaledWidth = currentWidth * currentScale;
+        const scaledHeight = currentHeight * currentScale;
+        
+        // 根据动画设置应用过渡效果
+        if (enableAnimation) {
+          previewWrapper.style.transition = 'all 0.3s ease-in-out';
+        } else {
+          previewWrapper.style.transition = 'none';
+        }
+        
+        // 直接设置预览窗口的宽高
+        previewWrapper.style.width = `${scaledWidth}px`;
+        previewWrapper.style.height = `${scaledHeight}px`;
+        
+        // 更新显示
+        currentSizeDisplay.textContent = `${currentWidth} × ${currentHeight}`;
+        currentRatioDisplay.textContent = currentRatio.replace('/', ':');
+      }
+      
+      function updateRatioButtons() {
+        aspectBtns.forEach(btn => {
+          if (btn.getAttribute('data-ratio') === selectedAspectRatio) {
+            btn.classList.add('bg-primary/20', 'text-primary');
+            btn.classList.remove('bg-neutral-800', 'hover:bg-neutral-700');
+          } else {
+            btn.classList.remove('bg-primary/20', 'text-primary');
+            btn.classList.add('bg-neutral-800', 'hover:bg-neutral-700');
+          }
+        });
+      }
+      
+      function updateOrientationButtons() {
+        if (isLandscape) {
+          orientationLandscapeBtn.classList.add('bg-primary/20', 'text-primary');
+          orientationLandscapeBtn.classList.remove('bg-neutral-800', 'hover:bg-neutral-700');
+          
+          orientationPortraitBtn.classList.remove('bg-primary/20', 'text-primary');
+          orientationPortraitBtn.classList.add('bg-neutral-800', 'hover:bg-neutral-700');
+        } else {
+          orientationPortraitBtn.classList.add('bg-primary/20', 'text-primary');
+          orientationPortraitBtn.classList.remove('bg-neutral-800', 'hover:bg-neutral-700');
+          
+          orientationLandscapeBtn.classList.remove('bg-primary/20', 'text-primary');
+          orientationLandscapeBtn.classList.add('bg-neutral-800', 'hover:bg-neutral-700');
+        }
+      }
+      
+      function refreshPreview() {
+        if (!previewFrame.src) return;
+        
+        showLoading();
+        
+        // 修复文件预览刷新问题
+        if (currentFileUrl) {
+          // 对于文件预览，重新加载相同的URL
+          previewFrame.src = currentFileUrl;
+        } else {
+          // 对于URL预览，重新加载相同的URL
+          previewFrame.src = previewFrame.src;
+        }
+        
+        previewFrame.onload = function() {
+          hideLoading();
+          loadDebugConfig();
+        };
+      }
+      
+      function toggleFullscreen() {
+        if (!document.fullscreenElement) {
+          document.documentElement.requestFullscreen().catch(err => {
+            alert(`全屏模式错误: ${err.message}`);
+          });
+          expandPreviewBtn.innerHTML = '<i class="fa fa-compress"></i>';
+        } else {
+          if (document.exitFullscreen) {
+            document.exitFullscreen();
+            expandPreviewBtn.innerHTML = '<i class="fa fa-expand"></i>';
+          }
+        }
+      }
+
+      //#region 调试配置功能
+      function injectDebugConfigScript(htmlContent) {
+        const debugConfigScript = `
+          <script>
+            // 调试配置功能
+            (function() {
+              // 监听调试配置请求
+              window.addEventListener('message', function(event) {
+                if (event.data && event.data.type === 'get_debug_config') {
+                  // 检查是否有调试配置
+                  if (window.cc_debug_config) {
+                    event.source.postMessage({
+                      type: 'debug_config_response',
+                      config: window.cc_debug_config
+                    }, '*');
+                  }
+                }
+              });
+              
+              // 监听配置更新
+              window.addEventListener('message', function(event) {
+                if (event.data && event.data.type === 'cc_debug_config_update') {
+                  updateDebugConfig(event.data.configType, event.data.value);
+                }
+              });
+              
+              // 更新调试配置
+              function updateDebugConfig(type, value) {
+                // 尝试更新全局调试配置
+                if (window.cc_debug_config) {
+                  const configItem = window.debugConfig.find(item => item.type === type);
+                  if (configItem) {
+                    configItem.value = parseFloat(value);
+                    // 触发配置更新事件
+                    if (window.onDebugConfigUpdate) {
+                      window.onDebugConfigUpdate(type, value);
+                    }
+                  }
+                }
+                
+                // 触发自定义事件
+                const event = new CustomEvent('debugConfigUpdate', {
+                  detail: { type, value }
+                });
+                window.dispatchEvent(event);
+              }
+              
+              // 页面加载完成后发送配置就绪信号
+              window.addEventListener('load', function() {
+              });
+            })();
+          <\/script>
+        `;
+        
+        // 将脚本注入到head中
+        if (htmlContent.includes('</head>')) {
+          return htmlContent.replace('</head>', debugConfigScript + '</head>');
+        } else if (htmlContent.includes('<html>')) {
+          return htmlContent.replace('<html>', '<html><head>' + debugConfigScript + '</head>');
+        } else {
+          return debugConfigScript + htmlContent;
+        }
+      }
+      
+      function loadDebugConfig() {
+        showLoading();
+        debugConfigContainer.innerHTML = '<div class="text-center text-neutral p-4"><i class="fa fa-spinner fa-spin text-2xl mb-2"></i><p>正在加载调试配置...</p></div>';
+        
+        try {
+          // 尝试通过postMessage与iframe通信获取配置
+          const message = {
+            type: 'get_debug_config',
+            source: 'preview_tool'
+          };
+          
+          previewFrame.contentWindow.postMessage(message, '*');
+          
+          // 设置消息监听器
+          window.addEventListener('message', handleDebugConfigResponse);
+          
+          // 设置超时，防止无限等待
+          window._handleDebugConfigResponseTimeout = setTimeout(() => {
+            window.removeEventListener('message', handleDebugConfigResponse);
+            hideLoading();
+            showNoConfigMessage();
+          }, 3000);
+          
+        } catch (e) {
+          console.error('读取调试配置失败:', e);
+          hideLoading();
+          showNoConfigMessage();
+        }
+      }
+      
+      function handleDebugConfigResponse(event) {
+        // 验证消息来源
+        if (event.source !== previewFrame.contentWindow) return;
+        
+        if (event.data && event.data.type === 'debug_config_response') {
+          const debugConfig = event.data.config;
+          
+          hideLoading();
+          
+          if (debugConfig) {
+            renderDebugConfig(debugConfig);
+          } else {
+            showNoConfigMessage();
+          }
+
+          !!window._handleDebugConfigResponseTimeout && clearTimeout(window._handleDebugConfigResponseTimeout);
+        }
+      }
+      
+      function renderDebugConfig(debugConfig) {
+        debugConfigContainer.innerHTML = '';
+        
+        console.log("111", debugConfig);
+        
+        // 按 debugConfig.name.name 分组配置项
+        const groupedConfig = {};
+        Object.values(debugConfig).forEach(item => {
+          console.log(item)
+          const groupName = item.name.name; // 使用 name 对象中的 name 属性作为分组键
+          if (!groupedConfig[groupName]) {
+            groupedConfig[groupName] = [];
+          }
+          groupedConfig[groupName].push(item);
+        });
+        console.log("111", groupedConfig);
+        
+        // 为每个分组创建配置项
+        Object.keys(groupedConfig).forEach(groupName => {
+          const group = groupedConfig[groupName];
+          const groupElement = document.createElement('div');
+          groupElement.className = 'bg-darker rounded-lg p-4 mb-4';
+          
+          const groupTitle = document.createElement('h3');
+          groupTitle.className = 'font-medium mb-3 text-primary';
+          groupTitle.textContent = groupName;
+          groupElement.appendChild(groupTitle);
+          
+          group.forEach(config => {
+            const configElement = document.createElement('div');
+            configElement.className = 'mb-4';
+            
+            const label = document.createElement('label');
+            label.className = 'block text-sm font-medium mb-2';
+            label.textContent = config.type;
+            configElement.appendChild(label);
+            
+            // 检查是否有min和max属性
+            if (config.hasOwnProperty('min') && config.hasOwnProperty('max')) {
+              // 创建滑动控制器
+              const sliderContainer = document.createElement('div');
+              sliderContainer.className = 'flex items-center space-x-3';
+              
+              const slider = document.createElement('input');
+              slider.type = 'range';
+              slider.min = config.min;
+              slider.max = config.max;
+              slider.value = config.value;
+              slider.step = config.step || (config.max - config.min) / 100;
+              slider.className = 'flex-1 h-2 bg-dark rounded-lg appearance-none cursor-pointer';
+              slider.dataset.type = config.type;
+              
+              const valueDisplay = document.createElement('input');
+              valueDisplay.type = 'number';
+              valueDisplay.min = config.min;
+              valueDisplay.max = config.max;
+              valueDisplay.step = config.step || (config.max - config.min) / 100;
+              valueDisplay.value = config.value;
+              valueDisplay.className = 'w-20 bg-darker border border-neutral-700 rounded px-2 py-1 text-sm focus:outline-none focus:ring-2 focus:ring-primary/50';
+              valueDisplay.dataset.type = config.type;
+              
+              // 滑动条事件
+              slider.addEventListener('input', function() {
+                const value = parseFloat(this.value);
+                valueDisplay.value = value;
+                updateDebugConfigValue(config.type, value);
+              });
+              
+              // 数值输入框事件
+              valueDisplay.addEventListener('input', function() {
+                let value = parseFloat(this.value);
+                // 确保值在范围内
+                value = Math.max(config.min, Math.min(config.max, value));
+                this.value = value;
+                slider.value = value;
+                updateDebugConfigValue(config.type, value);
+              });
+              
+              // 数值输入框失去焦点时验证
+              valueDisplay.addEventListener('blur', function() {
+                let value = parseFloat(this.value);
+                if (isNaN(value)) {
+                  value = config.value;
+                }
+                value = Math.max(config.min, Math.min(config.max, value));
+                this.value = value;
+                slider.value = value;
+                updateDebugConfigValue(config.type, value);
+              });
+              
+              sliderContainer.appendChild(slider);
+              sliderContainer.appendChild(valueDisplay);
+              configElement.appendChild(sliderContainer);
+              
+              // 显示范围信息
+              const rangeInfo = document.createElement('div');
+              rangeInfo.className = 'flex justify-between text-xs text-neutral mt-1';
+              rangeInfo.innerHTML = `<span>${config.min}</span><span>${config.max}</span>`;
+              configElement.appendChild(rangeInfo);
+            } else {
+              // 只有value，创建输入框
+              const inputContainer = document.createElement('div');
+              inputContainer.className = 'flex items-center space-x-2';
+              
+              const input = document.createElement('input');
+              input.type = 'number';
+              input.value = config.value;
+              input.className = 'flex-1 bg-darker border border-neutral-700 rounded px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary/50';
+              input.dataset.type = config.type;
+              
+              input.addEventListener('input', function() {
+                const value = parseFloat(this.value);
+                updateDebugConfigValue(config.type, value);
+              });
+              
+              inputContainer.appendChild(input);
+              configElement.appendChild(inputContainer);
+            }
+            
+            groupElement.appendChild(configElement);
+          });
+          
+          debugConfigContainer.appendChild(groupElement);
+        });
+      }
+      
+      function updateDebugConfigValue(type, value) {
+        try {
+          // 向预览页面发送配置更新
+          previewFrame.contentWindow.postMessage({
+            type: 'cc_debug_config_update',
+            configType: type,
+            value: value
+          }, '*');
+        } catch (e) {
+          console.error('更新调试配置失败:', e);
+        }
+      }
+      
+      function showNoConfigMessage() {
+        debugConfigContainer.innerHTML = `
+          <div class="text-center text-neutral p-4">
+            <i class="fa fa-info-circle text-2xl mb-2"></i>
+            <p>未找到可配置参数</p>
+            <p class="text-xs mt-2">页面可能不包含调试配置或受跨域限制</p>
+          </div>
+        `;
+      }
+      //#endregion
+
+      //#region 预览资源提取
+      function extractResources() {
+        if (!previewFrame.src) {
+          alert('请先加载预览页面');
+          return;
+        }
+        
+        showLoading();
+        resourceStatus.textContent = '正在提取资源...';
+        extractedResources = [];
+        
+        try {
+          // 向iframe发送消息，请求它自己提取资源
+          const message = {
+            type: 'extract_resources_request',
+            source: 'preview_tool'
+          };
+          
+          previewFrame.contentWindow.postMessage(message, '*');
+          
+          // 设置消息监听器
+          window.addEventListener('message', handleResourceExtractionResponse);
+          
+          // 设置超时
+          setTimeout(() => {
+            window.removeEventListener('message', handleResourceExtractionResponse);
+            if (extractedResources.length === 0) {
+              hideLoading();
+              resourceStatus.textContent = '资源提取超时或页面不支持资源提取';
+              alert('无法提取资源：页面可能受跨域限制或未响应请求');
+            }
+          }, 5000);
+          
+        } catch (e) {
+          console.error('发送资源提取请求失败:', e);
+          hideLoading();
+          resourceStatus.textContent = '资源提取失败';
+          alert('发送资源提取请求失败：' + e.message);
+        }
+      }
+      
+      function handleResourceExtractionResponse(event) {
+        // 验证消息来源和类型
+        if (event.data && event.data.type === 'resource_extraction_response') {
+          const resources = event.data.resources;
+          
+          if (resources && Array.isArray(resources)) {
+            extractedResources = resources;
+            
+            hideLoading();
+            if (extractedResources.length > 0) {
+              downloadContainer.classList.remove('hidden');
+              resourceList.classList.remove('hidden');
+              updateResourceList();
+              resourceStatus.textContent = `成功提取 ${extractedResources.length} 个资源文件`;
+            } else {
+              resourceStatus.textContent = '未找到可提取的资源文件';
+            }
+          }
+          
+          // 移除事件监听器
+          window.removeEventListener('message', handleResourceExtractionResponse);
+        }
+      }
+
+      function injectResourceExtractionScript(htmlContent) {
+        const resourceExtractionScript = `
+          <script>
+            // 增强的资源提取功能
+            (function() {
+              const capturedResources = [];
+              const originalFetch = window.fetch;
+              
+              // 拦截fetch请求
+              window.fetch = function(...args) {
+                return originalFetch.apply(this, args).then(response => {
+                  if (response.ok) {
+                    const url = args[0];
+                    response.clone().text().then(text => {
+                      checkAndCaptureResource(url, text, response.headers.get('content-type'));
+                    }).catch(() => {});
+                  }
+                  return response;
+                });
+              };
+              
+              // 拦截XMLHttpRequest
+              const originalXHROpen = XMLHttpRequest.prototype.open;
+              const originalXHRSend = XMLHttpRequest.prototype.send;
+              
+              XMLHttpRequest.prototype.open = function(method, url) {
+                this._url = url;
+                return originalXHROpen.apply(this, arguments);
+              };
+              
+              XMLHttpRequest.prototype.send = function(...args) {
+                this.addEventListener('load', function() {
+                  if (this.status === 200) {
+                    try {
+                      const responseText = this.responseText;
+                      const contentType = this.getResponseHeader('content-type');
+                      checkAndCaptureResource(this._url, responseText, contentType);
+                    } catch (e) {}
+                  }
+                });
+                return originalXHRSend.apply(this, args);
+              };
+              
+              // 监听图片加载
+              const originalImage = Image;
+              window.Image = function() {
+                const img = new originalImage();
+                img.addEventListener('load', function() {
+                  try {
+                    // 尝试通过canvas获取base64数据
+                    if (this.src && this.src.startsWith('data:')) {
+                      captureBase64Resource(this.src, 'image');
+                    }
+                  } catch (e) {}
+                });
+                return img;
+              };
+              
+              // 检查并捕获资源
+              function checkAndCaptureResource(url, content, contentType) {
+                if (!content || typeof content !== 'string') return;
+                
+                // 检查是否是base64数据
+                if (content.includes('base64,')) {
+                  const base64Match = content.match(/data:[^;]+;base64,([^"']+)/);
+                  if (base64Match) {
+                    captureBase64Resource(content, getResourceType(contentType, url));
+                  }
+                }
+                
+                // 检查CSS中的base64资源
+                if (contentType && contentType.includes('text/css')) {
+                  extractBase64FromCSS(content);
+                }
+              }
+              
+              // 从CSS中提取base64资源
+              function extractBase64FromCSS(cssContent) {
+                const base64Regex = /url\(['"]?(data:[^;]+;base64,[^"')]+)['"]?\)/g;
+                let match;
+                while ((match = base64Regex.exec(cssContent)) !== null) {
+                  captureBase64Resource(match[1], 'image'); // CSS中的base64通常是图片
+                }
+              }
+              
+              // 捕获base64资源
+              function captureBase64Resource(base64Data, resourceType) {
+                // 避免重复捕获
+                if (capturedResources.some(res => res.data === base64Data)) {
+                  return;
+                }
+                
+                const resource = {
+                  name: generateResourceName(base64Data, resourceType),
+                  data: base64Data,
+                  type: resourceType,
+                  size: Math.floor((base64Data.length * 3) / 4) // 估算大小
+                };
+                
+                capturedResources.push(resource);
+              }
+              
+              // 生成资源名称
+              function generateResourceName(base64Data, type) {
+                const mimeMatch = base64Data.match(/data:([^;]+);/);
+                const mimeType = mimeMatch ? mimeMatch[1] : 'application/octet-stream';
+                const extension = getExtensionFromMimeType(mimeType);
+                const timestamp = Date.now();
+                const random = Math.random().toString(36).substr(2, 5);
+                
+                return \`\${type}_\${timestamp}_\${random}.\${extension}\`;
+              }
+              
+              // 根据MIME类型获取文件扩展名
+              function getExtensionFromMimeType(mimeType) {
+                const mimeMap = {
+                  'image/jpeg': 'jpg',
+                  'image/jpg': 'jpg',
+                  'image/png': 'png',
+                  'image/gif': 'gif',
+                  'image/webp': 'webp',
+                  'image/svg+xml': 'svg',
+                  'font/woff': 'woff',
+                  'font/woff2': 'woff2',
+                  'application/font-woff': 'woff',
+                  'application/font-woff2': 'woff2',
+                  'application/x-font-woff': 'woff',
+                  'application/octet-stream': 'bin',
+                  'audio/mpeg': 'mp3',
+                  'audio/wav': 'wav',
+                  'audio/ogg': 'ogg',
+                  'video/mp4': 'mp4',
+                  'video/webm': 'webm',
+                  'application/javascript': 'js',
+                  'text/css': 'css',
+                  'text/html': 'html'
+                };
+                return mimeMap[mimeType] || 'bin';
+              }
+              
+              // 获取资源类型
+              function getResourceType(contentType, url) {
+                if (!contentType) {
+                  return getTypeFromUrl(url);
+                }
+                
+                if (contentType.includes('image')) return 'image';
+                if (contentType.includes('font')) return 'font';
+                if (contentType.includes('audio')) return 'audio';
+                if (contentType.includes('video')) return 'video';
+                if (contentType.includes('javascript')) return 'script';
+                if (contentType.includes('css')) return 'stylesheet';
+                
+                return getTypeFromUrl(url);
+              }
+              
+              // 从URL推断类型
+              function getTypeFromUrl(url) {
+                if (!url) return 'unknown';
+                
+                const imageExtensions = ['.jpg', '.jpeg', '.png', '.gif', '.webp', '.svg'];
+                const fontExtensions = ['.woff', '.woff2', '.ttf', '.otf', '.eot'];
+                const audioExtensions = ['.mp3', '.wav', '.ogg', '.m4a'];
+                const videoExtensions = ['.mp4', '.webm', '.avi', '.mov'];
+                
+                const lowerUrl = url.toLowerCase();
+                if (imageExtensions.some(ext => lowerUrl.includes(ext))) return 'image';
+                if (fontExtensions.some(ext => lowerUrl.includes(ext))) return 'font';
+                if (audioExtensions.some(ext => lowerUrl.includes(ext))) return 'audio';
+                if (videoExtensions.some(ext => lowerUrl.includes(ext))) return 'video';
+                
+                return 'unknown';
+              }
+              
+              // 监听资源提取请求
+              window.addEventListener('message', function(event) {
+                if (event.data && event.data.type === 'extract_resources_request') {
+                  // 等待所有资源加载完成
+                  setTimeout(() => {
+                    // 提取Blob资源
+                    extractBlobResources().then(blobResources => {
+                      capturedResources.push(...blobResources);
+                      
+                      // 提取Canvas资源
+                      extractCanvasResources();
+                      
+                      event.source.postMessage({
+                        type: 'resource_extraction_response',
+                        resources: capturedResources
+                      }, '*');
+                    });
+                  }, 1000);
+                }
+              });
+              
+              // 监听页面加载完成
+              window.addEventListener('load', function() {
+                // 提取页面中已有的base64资源
+                extractExistingBase64Resources();
+              });
+              
+              // 提取页面中已存在的base64资源
+              function extractExistingBase64Resources() {
+                // 提取img标签中的base64
+                document.querySelectorAll('img').forEach(img => {
+                  if (img.src && img.src.startsWith('data:')) {
+                    captureBase64Resource(img.src, 'image');
+                  }
+                });
+                
+                // 提取CSS中的base64背景图
+                const elements = document.querySelectorAll('*');
+                elements.forEach(el => {
+                  try {
+                    const style = window.getComputedStyle(el);
+                    const backgroundImage = style.backgroundImage;
+                    if (backgroundImage && backgroundImage.startsWith('url("data:')) {
+                      const base64Match = backgroundImage.match(/url\\(["']?(data:[^"')]+)["']?\\)/);
+                      if (base64Match) {
+                        captureBase64Resource(base64Match[1], 'image');
+                      }
+                    }
+                  } catch (e) {}
+                });
+              }
+              
+              // 提取Blob资源 - 增强版本
+              function extractBlobResources() {
+                return new Promise((resolve) => {
+                  const blobResources = [];
+                  const blobUrls = [];
+                  
+                  // 查找页面中使用的Blob URL
+                  const elements = document.querySelectorAll('*');
+                  elements.forEach(el => {
+                    // 检查src属性
+                    if (el.src && el.src.startsWith('blob:')) {
+                      blobUrls.push(el.src);
+                    }
+                    
+                    // 检查href属性
+                    if (el.href && el.href.startsWith('blob:')) {
+                      blobUrls.push(el.href);
+                    }
+                    
+                    // 检查CSS中的Blob URL
+                    try {
+                      const style = window.getComputedStyle(el);
+                      const backgroundImage = style.backgroundImage;
+                      if (backgroundImage && backgroundImage.includes('blob:')) {
+                        const blobMatch = backgroundImage.match(/url\\(["']?(blob:[^"')]+)["']?\\)/);
+                        if (blobMatch) {
+                          blobUrls.push(blobMatch[1]);
+                        }
+                      }
+                    } catch (e) {}
+                  });
+                  
+                  // 去重
+                  const uniqueBlobUrls = [...new Set(blobUrls)];
+                  
+                  if (uniqueBlobUrls.length === 0) {
+                    resolve(blobResources);
+                    return;
+                  }
+                  
+                  let processed = 0;
+                  
+                  uniqueBlobUrls.forEach(blobUrl => {
+                    // 使用XMLHttpRequest而不是fetch，以处理跨域问题
+                    const xhr = new XMLHttpRequest();
+                    xhr.open('GET', blobUrl, true);
+                    xhr.responseType = 'blob';
+                    
+                    xhr.onload = function() {
+                      if (this.status === 200) {
+                        const blob = this.response;
+                        
+                        // 获取Blob的类型信息
+                        const mimeType = blob.type;
+                        const resourceType = getResourceTypeFromMime(mimeType);
+                        const extension = getExtensionFromMimeType(mimeType);
+                        
+                        // 将Blob转换为Base64
+                        const reader = new FileReader();
+                        reader.onload = function() {
+                          const base64Data = reader.result;
+                          
+                          const resource = {
+                            name: generateBlobResourceName(resourceType, extension),
+                            data: base64Data,
+                            type: resourceType,
+                            size: blob.size,
+                            mimeType: mimeType
+                          };
+                          
+                          blobResources.push(resource);
+                          processed++;
+                          
+                          if (processed === uniqueBlobUrls.length) {
+                            resolve(blobResources);
+                          }
+                        };
+                        reader.readAsDataURL(blob);
+                      } else {
+                        processed++;
+                        if (processed === uniqueBlobUrls.length) {
+                          resolve(blobResources);
+                        }
+                      }
+                    };
+                    
+                    xhr.onerror = function() {
+                      processed++;
+                      if (processed === uniqueBlobUrls.length) {
+                        resolve(blobResources);
+                      }
+                    };
+                    
+                    xhr.send();
+                  });
+                });
+              }
+              
+              // 提取Canvas资源
+              function extractCanvasResources() {
+                document.querySelectorAll('canvas').forEach((canvas, index) => {
+                  try {
+                    // 将Canvas转换为Blob
+                    canvas.toBlob(function(blob) {
+                      if (blob) {
+                        const reader = new FileReader();
+                        reader.onload = function() {
+                          const base64Data = reader.result;
+                          const resource = {
+                            name: \`canvas_\${index}_\${Date.now()}.png\`,
+                            data: base64Data,
+                            type: 'image',
+                            size: blob.size,
+                            mimeType: 'image/png'
+                          };
+                          
+                          capturedResources.push(resource);
+                        };
+                        reader.readAsDataURL(blob);
+                      }
+                    }, 'image/png');
+                  } catch (e) {
+                    // 忽略无法提取的Canvas
+                  }
+                });
+              }
+              
+              // 根据MIME类型获取资源类型
+              function getResourceTypeFromMime(mimeType) {
+                if (mimeType.startsWith('image/')) return 'image';
+                if (mimeType.startsWith('audio/')) return 'audio';
+                if (mimeType.startsWith('video/')) return 'video';
+                if (mimeType.startsWith('font/')) return 'font';
+                if (mimeType.includes('javascript')) return 'script';
+                if (mimeType.includes('json')) return 'json';
+                if (mimeType.includes('css')) return 'stylesheet';
+                if (mimeType.includes('html')) return 'html';
+                return 'binary';
+              }
+              
+              // 生成Blob资源名称
+              function generateBlobResourceName(resourceType, extension) {
+                const timestamp = Date.now();
+                const random = Math.random().toString(36).substr(2, 5);
+                return \`\${resourceType}_\${timestamp}_\${random}.\${extension}\`;
+              }
+              
+            })();
+          <\/script>
+        `;
+        
+        // 将脚本注入到head中
+        if (htmlContent.includes('</head>')) {
+          return htmlContent.replace('</head>', resourceExtractionScript + '</head>');
+        } else if (htmlContent.includes('<html>')) {
+          return htmlContent.replace('<html>', '<html><head>' + resourceExtractionScript + '</head>');
+        } else {
+          return resourceExtractionScript + htmlContent;
+        }
+      }
+      
+      function updateResourceList() {
+        resourceItems.innerHTML = '';
+        
+        extractedResources.forEach((resource, index) => {
+          const item = document.createElement('div');
+          item.className = 'flex justify-between items-center text-xs bg-darker/50 p-2 rounded';
+          
+          const nameSpan = document.createElement('span');
+          nameSpan.className = 'truncate flex-1 mr-2';
+          nameSpan.textContent = resource.name;
+          nameSpan.title = resource.name;
+          
+          const sizeSpan = document.createElement('span');
+          sizeSpan.className = 'text-neutral';
+          
+          if (resource.size) {
+            sizeSpan.textContent = formatFileSize(resource.size);
+          } else if (resource.data) {
+            // 估算base64数据大小
+            const base64Size = Math.floor((resource.data.length * 3) / 4);
+            sizeSpan.textContent = formatFileSize(base64Size);
+          } else {
+            sizeSpan.textContent = '未知大小';
+          }
+          
+          const typeSpan = document.createElement('span');
+          typeSpan.className = 'ml-2 px-1 bg-neutral-800 rounded text-neutral';
+          typeSpan.textContent = resource.type || '未知';
+          
+          item.appendChild(nameSpan);
+          item.appendChild(sizeSpan);
+          item.appendChild(typeSpan);
+          
+          resourceItems.appendChild(item);
+        });
+      }
+      
+      function downloadResources() {
+        if (!extractedResources || extractedResources.length === 0) {
+          alert('没有可下载的资源');
+          return;
+        }
+        
+        showLoading();
+        resourceStatus.textContent = '正在打包资源...';
+        
+        const zip = new JSZip();
+        let processedCount = 0;
+        
+        extractedResources.forEach((resource, index) => {
+          if (resource.data) {
+            // 处理base64数据
+            try {
+              // 提取纯base64数据（去掉data:image/png;base64,前缀）
+              const base64Data = resource.data.split(',')[1];
+              if (base64Data) {
+                // 将base64转换为二进制
+                const binaryString = atob(base64Data);
+                const bytes = new Uint8Array(binaryString.length);
+                for (let i = 0; i < binaryString.length; i++) {
+                  bytes[i] = binaryString.charCodeAt(i);
+                }
+                zip.file(resource.name, bytes);
+              }
+            } catch (e) {
+              console.error(`处理base64资源失败: ${resource.name}`, e);
+            }
+          }
+          
+          processedCount++;
+          checkCompletion();
+        });
+        
+        function checkCompletion() {
+          if (processedCount === extractedResources.length) {
+            hideLoading();
+            resourceStatus.textContent = '资源打包完成';
+            
+            zip.generateAsync({type: "blob"}).then(function(content) {
+              saveAs(content, "extracted_resources.zip");
+            });
+          }
+        }
+      }
+
+      // 格式化文件大小
+      function formatFileSize(bytes) {
+        if (bytes === 0) return '0 B';
+        const k = 1024;
+        const sizes = ['B', 'KB', 'MB', 'GB'];
+        const i = Math.floor(Math.log(bytes) / Math.log(k));
+        return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+      }
+
+      // 更新质量设置显示
+      function updateQualitySettings() {
+        const quality = recordingQuality.value;
+        
+        if (quality === 'custom') {
+          customQualitySettings.classList.remove('hidden');
+        } else {
+          customQualitySettings.classList.add('hidden');
+          
+          // 设置预设值
+          switch (quality) {
+            case 'superhigh':
+              customWidth.value = 2560;
+              customHeight.value = 1440;
+              customFramerate.value = 60;
+              customBitrate.value = 44100;
+              break;
+            case 'high':
+              customWidth.value = 1920;
+              customHeight.value = 1080;
+              customFramerate.value = 60;
+              customBitrate.value = 44100;
+              break;
+            case 'medium':
+              customWidth.value = 1280;
+              customHeight.value = 720;
+              customFramerate.value = 30;
+              customBitrate.value = 22050;
+              break;
+            case 'low':
+              customWidth.value = 854;
+              customHeight.value = 480;
+              customFramerate.value = 24;
+              customBitrate.value = 11025;
+              break;
+          }
+        }
+      }
+
+      // 获取录制配置
+      function getRecordingConfig() {
+        const width = parseInt(customWidth.value);
+        const height = parseInt(customHeight.value);
+        const frameRate = parseInt(customFramerate.value);
+        const bitrate = parseInt(customBitrate.value); // 转换为bps
+        
+        return {
+          width,
+          height,
+          frameRate,
+          bitrate,
+          audioSource: audioSource.value
+        };
+      }
+
+      // 开始录制
+      async function startRecording() {
+        // 检查是否在HTTPS环境下
+        // if (location.protocol !== 'https:' && location.hostname !== 'localhost') {
+        //   recordingError.classList.remove('hidden');
+        //   return;
+        // }
+        
+        // 清除之前的录制内容
+        recordedChunks = [];
+        currentRecordingBlob = null;
+        
+        try {
+          const config = getRecordingConfig();
+          
+          // 获取屏幕流
+          screenStream = await navigator.mediaDevices.getDisplayMedia({
+            video: {
+              cursor: "always",
+              displaySurface: "window",
+              width: { ideal: config.width },
+              height: { ideal: config.height },
+              frameRate: { ideal: config.frameRate }
+            },
+            audio: config.audioSource !== 'none'
+          });
+          
+          let combinedStream = screenStream;
+          
+          // 获取音频流（如果需要）
+          if (config.audioSource === 'microphone' || config.audioSource === 'both') {
+            audioStream = await navigator.mediaDevices.getUserMedia({
+              audio: {
+                echoCancellation: true,
+                noiseSuppression: true,
+                sampleRate: config.bitrate
+              }
+            });
+            
+            if (config.audioSource === 'both') {
+              // 合并屏幕音频和麦克风音频
+              const audioContext = new AudioContext();
+              const destination = audioContext.createMediaStreamDestination();
+              
+              // 添加屏幕音频
+              if (screenStream.getAudioTracks().length > 0) {
+                const screenSource = audioContext.createMediaStreamSource(new MediaStream(screenStream.getAudioTracks()));
+                screenSource.connect(destination);
+              }
+              
+              // 添加麦克风音频
+              const micSource = audioContext.createMediaStreamSource(audioStream);
+              micSource.connect(destination);
+              
+              // 创建合并后的流
+              combinedStream = new MediaStream([
+                ...screenStream.getVideoTracks(),
+                ...destination.stream.getAudioTracks()
+              ]);
+            } else {
+              // 只使用麦克风音频
+              combinedStream = new MediaStream([
+                ...screenStream.getVideoTracks(),
+                ...audioStream.getAudioTracks()
+              ]);
+            }
+          }
+          
+          // 设置录制选项
+          const options = {
+            mimeType: 'video/webm;codecs=vp9,opus',
+            videoBitsPerSecond: config.bitrate
+          };
+          
+          // 回退选项
+          if (!MediaRecorder.isTypeSupported(options.mimeType)) {
+            options.mimeType = 'video/webm;codecs=vp8,opus';
+          }
+          if (!MediaRecorder.isTypeSupported(options.mimeType)) {
+            options.mimeType = 'video/webm';
+          }
+          if (!MediaRecorder.isTypeSupported(options.mimeType)) {
+            options.mimeType = '';
+          }
+          
+          // 创建MediaRecorder实例
+          mediaRecorder = new MediaRecorder(combinedStream, options);
+          
+          // 收集录制的数据块
+          mediaRecorder.ondataavailable = (event) => {
+            if (event.data.size > 0) {
+              recordedChunks.push(event.data);
+            }
+          };
+          
+          // 录制完成时的处理
+          mediaRecorder.onstop = () => {
+            currentRecordingBlob = new Blob(recordedChunks, { type: 'video/webm' });
+            
+            // 更新下载信息
+            fileSize.textContent = formatFileSize(currentRecordingBlob.size);
+            
+            // 显示下载区域
+            recordingDownload.classList.remove('hidden');
+            recordingInfo.classList.add('hidden');
+            
+            // 停止计时器
+            if (recordingTimerInterval) {
+              clearInterval(recordingTimerInterval);
+              recordingTimerInterval = null;
+            }
+            
+            // 停止所有媒体流轨道
+            if (screenStream) {
+              screenStream.getTracks().forEach(track => track.stop());
+              screenStream = null;
+            }
+            if (audioStream) {
+              audioStream.getTracks().forEach(track => track.stop());
+              audioStream = null;
+            }
+          };
+          
+          // 开始录制
+          mediaRecorder.start(1000); // 每1秒收集一次数据
+          isRecording = true;
+          
+          // 更新UI状态
+          startRecordingBtn.disabled = true;
+          stopRecordingBtn.disabled = false;
+          recordingStatus.classList.remove('hidden');
+          recordingDownload.classList.add('hidden');
+          recordingError.classList.add('hidden');
+          
+          // 显示录制信息
+          infoResolution.textContent = `${config.width}×${config.height}`;
+          infoFramerate.textContent = config.frameRate;
+          infoAudio.textContent = getAudioSourceText(config.audioSource);
+          recordingInfo.classList.remove('hidden');
+          
+          // 开始计时器
+          recordingStartTime = Date.now();
+          recordingTimerInterval = setInterval(updateRecordingTimer, 1000);
+          updateRecordingTimer();
+          
+        } catch (error) {
+          console.error('录制开始失败:', error);
+          alert('无法开始录制: ' + error.message);
+          resetRecordingState();
+        }
+      }
+
+      // 停止录制
+      function stopRecording() {
+        if (mediaRecorder && isRecording) {
+          mediaRecorder.stop();
+          isRecording = false;
+          
+          // 更新UI状态
+          startRecordingBtn.disabled = false;
+          stopRecordingBtn.disabled = true;
+          recordingStatus.classList.add('hidden');
+        }
+      }
+
+      // 更新录制计时器
+      function updateRecordingTimer() {
+        const elapsed = Math.floor((Date.now() - recordingStartTime) / 1000);
+        const minutes = Math.floor(elapsed / 60).toString().padStart(2, '0');
+        const seconds = (elapsed % 60).toString().padStart(2, '0');
+        recordingTimer.textContent = `${minutes}:${seconds}`;
+        
+        // 更新进度条（每60秒循环一次）
+        const progress = (elapsed % 60) / 60 * 100;
+        recordingProgress.style.width = `${progress}%`;
+      }
+
+      // 获取音频源文本
+      function getAudioSourceText(source) {
+        switch (source) {
+          case 'none': return '无';
+          case 'microphone': return '麦克风';
+          case 'system': return '系统音频';
+          case 'both': return '麦克风+系统';
+          default: return '未知';
+        }
+      }
+
+      // 下载录制内容
+      function downloadRecording() {
+        if (!currentRecordingBlob) {
+          alert('没有录制内容可下载');
+          return;
+        }
+        
+        try {
+          const url = URL.createObjectURL(currentRecordingBlob);
+          const a = document.createElement('a');
+          a.style.display = 'none';
+          a.href = url;
+          a.download = `webview-recording-${new Date().toISOString().slice(0, 19).replace(/:/g, '-')}.webm`;
+          
+          document.body.appendChild(a);
+          a.click();
+          
+          // 清理
+          setTimeout(() => {
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+          }, 100);
+          
+        } catch (error) {
+          console.error('下载录制内容失败:', error);
+          alert('下载录制内容失败: ' + error.message);
+        }
+      }
+
+      // 预览录制内容
+      function previewRecording() {
+        if (!currentRecordingBlob) {
+          alert('没有录制内容可预览');
+          return;
+        }
+        
+        const url = URL.createObjectURL(currentRecordingBlob);
+        previewVideo.src = url;
+        previewModal.classList.remove('hidden');
+        
+        // 模态框关闭时清理URL
+        previewVideo.onended = function() {
+          URL.revokeObjectURL(url);
+        };
+      }
+
+      // 重置录制状态
+      function resetRecordingState() {
+        isRecording = false;
+        startRecordingBtn.disabled = false;
+        stopRecordingBtn.disabled = true;
+        recordingStatus.classList.add('hidden');
+        recordingInfo.classList.add('hidden');
+        
+        if (recordingTimerInterval) {
+          clearInterval(recordingTimerInterval);
+          recordingTimerInterval = null;
+        }
+        
+        if (screenStream) {
+          screenStream.getTracks().forEach(track => track.stop());
+          screenStream = null;
+        }
+        if (audioStream) {
+          audioStream.getTracks().forEach(track => track.stop());
+          audioStream = null;
+        }
+      }
+
+      // 初始化质量设置
+      updateQualitySettings();
+      //#endregion
+
+      function showLoading() {
+        loadingIndicator.classList.remove('hidden');
+      }
+      
+      function hideLoading() {
+        loadingIndicator.classList.add('hidden');
+      }
+
+      // 动画切换事件
+      animationToggle.addEventListener('change', function() {
+        enableAnimation = this.checked;
+        // 立即应用动画设置
+        updatePreviewDimensions();
+      });
+    });
+  </script>
+</body>
+</html>
