@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>《股市风云录》隐私政策</title>
+<meta name="description" content="《股市风云录》隐私政策，由落饼枫林工作室制定并发布。">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%231B2230'/%3E%3Cpath d='M6 22 12 15 17 19 26 9' stroke='%235FA0E8' stroke-width='2.4' fill='none' stroke-linejoin='round'/%3E%3Cpath d='M20 9h6v6' stroke='%23E8B84B' stroke-width='2.4' fill='none'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="https://miaoda.feishu.cn/fonts/css2?family=Noto+Serif+SC:wght@500;600;700&family=Noto+Sans+SC:wght@400;500;700&display=swap">
+<style>
+  :root{
+    --paper:#F6F6F2;--card:#FFFFFF;--ink:#232830;--body:#333A45;--muted:#6E7683;
+    --line:#E4E6EA;--accent:#2058A6;--accent-soft:#EAF1FA;--note-bg:#F4F5F7;--dark:#1B2230;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{font-family:"Noto Sans SC",system-ui,"PingFang SC","Microsoft YaHei",sans-serif;background:var(--paper);color:var(--body);font-size:15px;line-height:1.85;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:820px;margin:0 auto;padding:0 18px 60px}
+
+  header.hero{background:linear-gradient(135deg,#1B2230 0%,#263046 62%,#2C3A57 100%);color:#EDF1F7;padding:44px 18px 38px;border-bottom:3px solid var(--accent)}
+  .hero-in{max-width:820px;margin:0 auto}
+  .hero .kicker{display:flex;align-items:center;gap:10px;font-size:12.5px;letter-spacing:.18em;color:#9FB4D8;font-weight:500}
+  .hero .kicker svg{width:14px;height:14px;flex:none}
+  .hero h1{font-family:"Noto Serif SC",serif;font-size:clamp(26px,4.5vw,36px);font-weight:700;color:#FFFFFF;margin:10px 0 6px;letter-spacing:.04em}
+  .hero .sub{color:#C4CFE0;font-size:14px}
+  .hero .dates{margin-top:14px;display:flex;flex-wrap:wrap;gap:8px}
+  .hero .dates span{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.16);color:#DCE4F2;font-size:12.5px;padding:5px 11px;border-radius:999px}
+
+  article.policy{background:var(--card);border:1px solid var(--line);border-radius:10px;margin-top:20px;padding:8px 26px 34px;overflow:hidden}
+  .pol-title{font-family:"Noto Serif SC",serif;font-size:25px;font-weight:700;color:var(--ink);text-align:center;margin:24px 0 6px;letter-spacing:.08em}
+  .pol-note{text-align:center;color:var(--muted);font-size:13px;margin-bottom:20px}
+
+  .toc{background:var(--note-bg);border:1px solid var(--line);border-radius:8px;padding:14px 18px;margin:16px 0 24px;font-size:13.5px}
+  .toc b{color:var(--ink);font-weight:600}
+  .toc ol{margin:8px 0 0;padding:0;list-style:none;color:var(--body)}
+  .toc li{margin:4px 0}
+  .toc a{color:var(--accent);text-decoration:none}
+  .toc a:hover{text-decoration:underline}
+
+  h3.s{font-family:"Noto Serif SC",serif;font-size:17px;font-weight:700;color:var(--ink);margin:30px 0 12px;padding-top:14px;scroll-margin-top:16px;border-top:1px solid var(--line)}
+  h3.s:first-of-type{border-top:0;padding-top:0;margin-top:6px}
+  .policy p{margin:9px 0;text-align:justify}
+  .policy ul{margin:8px 0 8px 22px}
+  .policy li{margin:4px 0;text-align:justify}
+  .policy h4{font-size:14.5px;color:var(--ink);font-weight:700;margin:16px 0 6px}
+  .policy a{color:var(--accent)}
+  .policy code{font-family:"SFMono-Regular",Menlo,Consolas,monospace;font-size:12.5px;background:var(--note-bg);border:1px solid var(--line);border-radius:3px;padding:0 4px;white-space:nowrap}
+
+  .t-wrap{overflow-x:auto}
+  table.perm{width:100%;border-collapse:collapse;font-size:13.5px;margin:10px 0;table-layout:fixed;min-width:560px}
+  table.perm col:nth-child(1){width:20%}table.perm col:nth-child(2){width:40%}table.perm col:nth-child(3){width:20%}table.perm col:nth-child(4){width:20%}
+  table.perm th{background:var(--note-bg);color:var(--ink);font-weight:600;text-align:left;padding:8px 10px;border:1px solid var(--line);font-size:13px}
+  table.perm td{padding:8px 10px;border:1px solid var(--line);vertical-align:top;word-break:break-word}
+
+  .sdk-wrap{overflow-x:auto}
+  table.sdk{width:100%;border-collapse:collapse;font-size:13px;margin:10px 0;table-layout:fixed;min-width:520px}
+  table.sdk col:nth-child(1){width:22%}table.sdk col:nth-child(2){width:26%}table.sdk col:nth-child(3){width:32%}table.sdk col:nth-child(4){width:20%}
+  table.sdk th{background:var(--note-bg);color:var(--ink);font-weight:600;text-align:left;padding:8px 10px;border:1px solid var(--line);font-size:12.5px}
+  table.sdk td{padding:8px 10px;border:1px solid var(--line);vertical-align:top;line-height:1.6;word-break:break-word}
+  table.sdk td small{display:block;color:var(--muted);font-size:11.5px;margin-top:2px}
+
+  .callout{background:var(--accent-soft);border-left:3px solid var(--accent);border-radius:0 6px 6px 0;padding:12px 16px;margin:14px 0;font-size:14px;color:var(--body)}
+  .callout b{color:var(--ink)}
+
+  footer.foot{color:var(--muted);font-size:12.5px;margin-top:22px;text-align:center;line-height:1.9}
+
+  @media print{
+    body{background:#fff}header.hero{background:#fff;color:#111;border:none}header.hero .kicker,.hero .dates{display:none}
+    header.hero h1{color:#111}header.hero .sub{color:#444}article.policy{margin-top:0;border:none}.wrap{padding:0}
+  }
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="hero-in">
+    <div class="kicker">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 20 9 13 13 17 21 7" stroke-linejoin="round"/><path d="M16 7h5v5" stroke-linejoin="round"/></svg>
+      CAPITAL SAGA · PRIVACY POLICY
+    </div>
+    <h1>《股市风云录》隐私政策</h1>
+    <p class="sub">本政策适用于《股市风云录》（CAPITAL SAGA）游戏，由运营主体落饼枫林工作室制定并发布。</p>
+    <div class="dates">
+      <span>更新日期：2026 年 11 月 14 日</span>
+      <span>生效日期：2026 年 11 月 14 日</span>
+      <span>版本：v1.1</span>
+    </div>
+  </div>
+</header>
+
+<div class="wrap">
+  <article class="policy">
+    <p class="pol-title">《股市风云录》隐私政策</p>
+    <p class="pol-note">更新日期：2026 年 11 月 14 日　　生效日期：2026 年 11 月 14 日　　版本：v1.1（增补账号登录与云存档条款）</p>
+
+    <nav class="toc" aria-label="目录">
+      <b>目 录</b>
+      <ol>
+        <li><a href="#s0">温馨提示</a></li>
+        <li><a href="#s1">一、我们如何收集和使用您的个人信息</a></li>
+        <li><a href="#s2">二、我们如何使用本地存储与同类技术</a></li>
+        <li><a href="#s3">三、我们如何保存您的个人信息</a></li>
+        <li><a href="#s4">四、我们如何共享、转让、公开披露您的个人信息</a></li>
+        <li><a href="#s5">五、第三方产品或服务如何获得您的个人信息</a></li>
+        <li><a href="#s6">六、我们如何保护您的个人信息</a></li>
+        <li><a href="#s7">七、您如何管理您的个人信息</a></li>
+        <li><a href="#s8">八、我们如何处理未成年人的个人信息</a></li>
+        <li><a href="#s9">九、本隐私政策如何更新</a></li>
+        <li><a href="#s10">十、如何联系我们</a></li>
+      </ol>
+    </nav>
+
+    <h3 class="s" id="s0">温馨提示</h3>
+    <p>欢迎您使用《股市风云录》！我们非常重视保护您的个人信息和隐私。本政策说明我们如何收集、使用、存储您的个人信息，以及您享有的相关权利。请您仔细阅读并充分理解以下要点：</p>
+    <p><b>《股市风云录》是一款以本地存档为主的游戏。</b>我们不架设用于存储您游戏数据的自有服务器，您的游戏进度默认只保存在您的设备本地；只有在您主动登录后，存档才会上传至您所用渠道提供的云端，用于跨设备接续与备份。</p>
+    <p>为向您提供账号登录与云存档、实名认证与防沉迷、数据统计、更新唤起与广告展示等服务，我们接入了必要的第三方 SDK。<b>只有在您于首次启动的隐私政策弹窗中点击「同意」之后，我们才会初始化此类 SDK。</b>您点击「拒绝」时，我们不会初始化任何会收集个人信息的 SDK，登录与云存档不可用，您仍可离线游玩。</p>
+    <p>游戏内广告均由第三方广告服务商提供，观看完全自愿。不观看广告只会失去对应的可选加成，<b>不影响正常交易、结算与游戏进度</b>。</p>
+    <p>您可以访问、更正、删除您的个人信息，也可以撤回授权同意、投诉举报。我们已采取符合业界标准的安全防护措施保护您的个人信息。</p>
+    <p>如您是未成年人，请您和您的监护人仔细阅读本政策，并在征得监护人授权同意的前提下使用我们的服务或向我们提供个人信息。</p>
+    <p>如您同意本政策，请您在游戏内隐私政策弹窗中点击「同意」开始使用我们的产品和服务；您也可随时在游戏内「设置 → 隐私政策」中查看全文、重新确认或撤回同意。</p>
+
+    <h3 class="s" id="s1">一、我们如何收集和使用您的个人信息</h3>
+
+    <h4>（一）我们如何收集您的个人信息</h4>
+    <p>在您使用《股市风云录》过程中，我们会按照如下方式收集您的个人信息：</p>
+
+    <p><b>游戏存档</b></p>
+    <p>《股市风云录》无需注册账号即可游玩。您的游戏进度与设置（长期进度与解锁档、单局持仓与资金流水、语言与音效设置、引导完成状态等）以存档形式保存在您的设备本地（应用内本地存储）。<b>如您清除应用数据，本地存档将被删除且无法恢复。</b></p>
+
+    <p><b>账号登录与云存档（可选）</b></p>
+    <p>登录功能为可选：不登录也可完整游玩。您选择登录时，我们通过所接入的渠道账号 SDK 获取<b>账号标识（openId、unionId）</b>，并在您授权「公开资料」后获取<b>昵称与头像</b>，仅用于在游戏内显示账号状态、区分存档归属，以及以账号 openId 作为实名认证的标识以便跨设备接续防沉迷状态。</p>
+    <p>登录后，游戏会把您的存档（长期进度、当前对局与设置三类内容）上传至该渠道提供的云端存档服务，形成<b>云端存档</b>，用于换设备接续与备份恢复。云端存档内容与本地存档一致，不含您的姓名、身份证件号码等实名信息。云存档为单账号单槽位，同名存档会被覆盖更新。</p>
+    <p>云端存档的同步遵循以下规则：本地进度优先，登录时不会直接用云端覆盖本地；仅当云端进度严格高于本地时，游戏会提示您选择以哪一方为准；为防止进度回退，当已知的云端进度高于本地时，游戏不会上传本地存档。退出登录后本机仍可离线游玩，云端存档保留。</p>
+
+    <p><b>实名认证与防沉迷</b></p>
+    <p>根据国家关于防止未成年人沉迷网络游戏的规定，您在使用本游戏前需完成实名认证。我们不自行收集您的姓名、身份证件类型、身份证件号码等实名信息；实名认证与游戏时长、时段限制由您获取本游戏所使用渠道提供的合规服务完成，请您遵循相应提示。我们仅接收「是否通过认证」「是否处于可游玩时段」等状态结果，用于放行或拦截游戏。</p>
+
+    <p><b>设备标识符与广告信息</b></p>
+    <p>经您同意本政策后，我们接入的第三方广告 SDK 可能收集您的设备标识符（<b>OAID</b>、<b>Android ID</b>）、网络信息（IP 地址）、应用安装列表、设备传感器信息、设备型号与系统版本，以及广告的曝光、点击与完播记录，用于广告展示、广告归因与投放效果统计。上述信息的处理规则详见本政策第五章。</p>
+    <p>为读取 OAID，Android 安装包会包含设备厂商 OAID 服务所需的普通权限（如 <code>com.asus.msa.SupplementaryDID.ACCESS</code>、<code>freemme.permission.msa</code>），仅用于获取匿名设备标识符，不涉及您的其他信息。</p>
+    <p>即使您已同意本政策，广告 SDK 对<b>位置、电话状态、OAID、传感器</b>等采集项也以最小必要为限，且 <b>BSSID、SSID 与设备 MAC 地址始终不采集</b>。</p>
+
+    <p><b>游戏内广告及其奖励</b></p>
+    <p>游戏内共设 7 处激励视频与 2 处插屏广告。激励视频对应的可选加成为：抽签时提高起始资金、重抽本金区间、破产后复活入场、追保期限延期、结算资金加成、获取一条内幕情报、临时提高单票融资上限；插屏广告出现在「返回首页」与「长时间无操作」两种时机，并有频次限制（首次进入主界面不展示、启动后 60 秒内不展示、每次展示后 60 秒内不再展示）。</p>
+    <p>观看激励视频期间游戏行情会暂停，广告结束后继续；<b>未完整观看则不发放对应加成</b>，但游戏可正常继续。是否观看由您自行决定，我们不设强制观看。</p>
+
+    <p><b>充值消费</b></p>
+    <p>《股市风云录》当前未开通游戏内充值功能，我们不收集您的支付信息。如后续开通，我们将依据相关法律法规处理您的交易信息，并在本政策中另行说明。</p>
+
+    <p><b>保障服务安全</b></p>
+    <p>本游戏主体在您的设备本地运行，我们不通过自有服务器收集您的设备标识符、IP 地址、访问日期与时间等日志信息。使用账号登录与云存档、实名认证、数据统计、更新唤起与广告等在线功能时，相关连接与日志信息由所接入的第三方 SDK 按其规则处理。</p>
+
+    <h4>（二）设备权限调用情况</h4>
+    <p>我们仅在必要范围内申请设备权限，不会默认开启。本游戏调用的权限、目的及询问情况如下：</p>
+    <div class="t-wrap">
+      <table class="perm">
+        <colgroup><col><col><col><col></colgroup>
+        <tr><th>设备权限</th><th>调用权限的目的</th><th>是否询问</th><th>用户可否关闭</th></tr>
+        <tr><td>网络</td><td>连接网络，用于账号登录与云存档同步、实名认证与防沉迷校验、数据统计、更新唤起与广告加载</td><td>否（安装时授予）</td><td>可（系统设置中关闭，关闭后仅能离线游玩）</td></tr>
+        <tr><td>网络状态</td><td>判断当前网络是否可用，避免在断网时重复请求，减少流量与耗电</td><td>否（安装时授予）</td><td>可（系统设置中关闭）</td></tr>
+        <tr><td>安装未知应用</td><td>仅在使用「更新到渠道客户端」功能时，允许跳转安装官方客户端；不主动安装其他应用</td><td>是（首次使用更新功能时由系统询问）</td><td>可（系统设置中关闭）</td></tr>
+        <tr><td>OAID 相关普通权限</td><td>读取匿名设备标识符（OAID），用于广告展示与归因；不读取其他设备信息</td><td>否（随广告 SDK 初始化生效，且需您先同意本政策）</td><td>可（撤回同意或关闭网络后不再采集）</td></tr>
+      </table>
+    </div>
+    <p>上表中「OAID 相关普通权限」对应的应用权限为 <code>com.asus.msa.SupplementaryDID.ACCESS</code> 与 <code>freemme.permission.msa</code>，均为部分厂商系统读取 OAID 所需的普通权限。</p>
+    <p>如您在授权后希望关闭权限，可在设备的设置功能中选择关闭，从而拒绝我们收集相应的个人信息。</p>
+
+    <h4>（三）我们如何使用您的个人信息</h4>
+    <p>我们会为实现本政策所述目的，在必要范围内使用所收集的个人信息，包括：提供游戏功能与存档、完成实名认证与防沉迷校验、保障网络与服务安全、展示广告并统计投放效果。</p>
+    <p>我们会对服务使用情况进行统计，并可能与第三方共享不包含任何身份识别信息的统计结果，用于产品开发、体验优化与安全保障。</p>
+    <p>当我们要将您的个人信息用于本政策未载明的其他用途时，会事先征求您的同意。</p>
+
+    <h4>（四）无需征得授权的例外</h4>
+    <p>根据相关法律法规及国家标准，以下情形中我们可能收集、使用您的个人信息而无需征求您的授权同意：</p>
+    <ul>
+      <li>与我们履行法律法规规定的义务相关的；</li>
+      <li>与国家安全、国防安全直接相关的；</li>
+      <li>与公共安全、公共卫生、重大公共利益直接相关的；</li>
+      <li>与刑事侦查、起诉、审判和判决执行等直接相关的；</li>
+      <li>出于维护个人信息主体或其他个人的生命、财产等重大合法权益但又很难得到本人授权同意的；</li>
+      <li>所涉及的个人信息是个人信息主体或监护人自行向社会公众公开的；</li>
+      <li>根据个人信息主体要求签订和履行合同所必需的；</li>
+      <li>从合法公开披露的信息中收集个人信息的，如合法的新闻报道、政府信息公开等渠道；</li>
+      <li>维护所提供产品或服务的安全稳定运行所必需的，如发现、处置产品或服务的故障。</li>
+    </ul>
+
+    <h3 class="s" id="s2">二、我们如何使用本地存储与同类技术</h3>
+    <p>《股市风云录》不使用 Cookies 进行广告追踪或用户画像。为实现存档功能，我们会在您的设备上使用本地存储保存三类内容：长期进度（解锁档、成就、引导状态）、单局进度（持仓、资金流水、当日状态）与本地设置（语言、音效、倍速）。上述内容不包含您的身份识别信息，仅用于实现游戏功能。</p>
+    <p>您可以随时通过清除应用数据（Android 系统设置 → 应用 → 清除数据）或在浏览器中清除站点数据的方式删除上述内容。<b>删除后游戏进度将无法恢复。</b>本地存储中还会保存隐私同意的选择结果、登录账号标识与云端进度快照，用于避免重复询问、恢复登录展示与判断同步方向；清除应用数据会同时移除这些记录。</p>
+    <p>如您已登录并启用云存档，存档副本另存于渠道云端（见本政策第三章与第五章），清除本地数据不会自动删除云端存档。</p>
+
+    <h3 class="s" id="s3">三、我们如何保存您的个人信息</h3>
+    <p>《股市风云录》未架设自有服务器，游戏进度默认仅保存在您的设备本地。您登录并启用云存档时，存档副本由所接入的渠道云端存档服务保存，保存位置、保存期限与删除方式由该渠道按其隐私政策与存储规则处理；我们不将该副本转存至自有服务器。使用实名认证、数据统计与广告等在线功能时，相关信息同样由所接入的第三方 SDK 按其隐私政策与存储规则处理；我们仅在实现功能所必需的期限内保留通过 SDK 获得的状态结果，超出期限后将删除或匿名化处理。</p>
+    <p>我们原则上在中华人民共和国境内处理您的个人信息。如确需向境外提供，我们将依法履行告知、取得单独同意及安全评估等义务。</p>
+
+    <h3 class="s" id="s4">四、我们如何共享、转让、公开披露您的个人信息</h3>
+    <p><b>委托处理</b></p>
+    <p>如我们委托第三方服务提供商处理您的个人信息（如实名认证与防沉迷校验、数据统计、广告投放），该等委托处理受本政策所声明目的的约束，我们会以合同方式对受托方进行监督，要求其按照我们的要求、本政策及相关法律法规处理个人信息。</p>
+    <p><b>共享</b></p>
+    <p>除为实现账号登录与云存档、实名认证与防沉迷、数据统计、更新唤起、成就与广告展示等功能，向本政策第五章所列第三方 SDK 提供必要信息外，我们不会与其他第三方共享您的个人信息。以下情形除外：</p>
+    <ul>
+      <li>事先获得您明确的同意或授权；</li>
+      <li>根据适用的法律法规规定，或按照政府主管部门的强制性要求进行提供；</li>
+      <li>为实现服务所必需，与我们的业务合作伙伴共享。</li>
+    </ul>
+    <p><b>转让</b></p>
+    <p>我们不会将您的个人信息转让给任何公司、组织和个人。但在涉及合并、收购、资产转让或破产清算且涉及个人信息转让时，我们会向您告知有关情况，并要求新的持有方继续受本政策约束，否则将要求其重新取得您的授权同意。</p>
+    <p><b>公开披露</b></p>
+    <p>我们不会公开披露您的个人信息，但法律法规另有规定或取得您单独同意的情形除外。</p>
+    <p><b>例外情况</b></p>
+    <p>根据相关法律及国家标准，以下情形中我们可能共享、转让、公开披露个人信息而无需事先征得您的授权同意：</p>
+    <ul>
+      <li>与我们履行法律法规规定的义务相关的；</li>
+      <li>与国家安全、国防安全直接相关的；</li>
+      <li>与公共安全、公共卫生、重大公共利益直接相关的；</li>
+      <li>与刑事侦查、起诉、审判和执行判决等直接相关的；</li>
+      <li>出于维护个人信息主体或其他个人的生命、财产等重大合法权益但又很难得到本人授权同意的；</li>
+      <li>个人信息主体或监护人自行向社会公众公开的个人信息；</li>
+      <li>从合法公开披露的信息中收集个人信息的，如合法的新闻报道、政府信息公开等渠道。</li>
+    </ul>
+    <p>请注意，若我们采取技术措施和其他必要措施处理个人信息，使数据接收方无法重新识别特定个人且不能复原，此类处理后的数据的共享、转让与公开披露无需另行通知并征得您的同意。</p>
+
+    <h3 class="s" id="s5">五、第三方产品或服务如何获得您的个人信息</h3>
+    <p>为向您提供更完整的功能，我们接入了下述第三方软件开发工具包（SDK）。其具体信息收集与使用情况，请以 SDK 运营方的隐私政策或相关声明为准。</p>
+    <div class="sdk-wrap">
+      <table class="sdk">
+        <colgroup><col><col><col><col></colgroup>
+        <tr><th>SDK 名称</th><th>使用目的</th><th>收集的信息</th><th>隐私政策</th></tr>
+        <tr>
+          <td>渠道账号与合规服务 SDK<small>由游戏发行渠道提供</small></td>
+          <td>账号登录、云存档、实名认证与防沉迷校验、数据统计、更新唤起</td>
+          <td>账号标识（openId、unionId、昵称、头像）、云存档内容（本地存档的副本）、设备标识符（Android ID、OAID）、网络信息（IP 地址）、游戏行为数据（启动与对局统计、实名认证状态结果）</td>
+          <td>由渠道方在其开发者文档或官方页面公布</td>
+        </tr>
+        <tr>
+          <td>广告 SDK<small>由广告服务商提供</small></td>
+          <td>激励视频与插屏广告的展示、广告归因与投放效果统计、频次控制</td>
+          <td>设备标识符（OAID、Android ID）、应用安装列表、设备传感器信息、网络信息（IP 地址）、设备型号与系统版本、广告曝光/点击/完播记录</td>
+          <td>由广告服务商在其官方页面公布</td>
+        </tr>
+      </table>
+    </div>
+    <div class="callout">
+      <b>上述 SDK 仅在您于首次启动的隐私政策弹窗中点击「同意」后才会初始化。</b>您点击「拒绝」时，我们不会初始化任何 SDK，也不会收集上述信息，登录与云存档不可用，您仍可离线游玩本游戏；广告入口在 SDK 未初始化时不会展示任何广告。若您在游戏内「设置 → 隐私政策」中撤回同意，我们将停止初始化广告 SDK 并关闭广告展示，同时立即停用登录与云存档等在线能力；已初始化且不支持反注册的 SDK，其处理活动自撤回时起不再继续。
+    </div>
+    <p>如后续接入其他第三方 SDK（如支付、其他统计服务），我们将在本节中逐项补充并更新本政策。</p>
+
+    <h3 class="s" id="s6">六、我们如何保护您的个人信息</h3>
+    <p>我们采取行业通行的数据保护技术与管理措施，例如传输加密、访问控制、最小必要收集，以防止个人信息遭到未经授权的访问、披露、篡改、丢失或毁坏。</p>
+    <p>请您知悉，互联网环境并非百分之百安全。尽管我们会尽力保护您发送给我们的信息，但我们无法对超出我们可控范围的风险作出担保。</p>
+    <p>在发生个人信息安全事件后，我们将按照法律法规要求及时向您告知：事件基本情况与可能影响、我们已采取或将要采取的处置措施、您可自主防范与降低风险的建议、对您的补救措施等。难以逐一告知时，我们会采取合理有效的方式发布公告，并按监管部门要求上报处置情况。</p>
+
+    <h3 class="s" id="s7">七、您如何管理您的个人信息</h3>
+    <p><b>访问及更正您的个人信息</b></p>
+    <p>您可以在游戏内「设置」界面查看并修改语言、音效、倍速等设置项；游戏进度可在游戏内的持仓、成就、纪录等界面查看。登录后，您可在「设置 → 账号与云存档」查看当前账号、云端同步状态，并可手动触发同步或退出登录。「设置 → 隐私政策」可查看本政策全文、查看或重新确认您的授权状态。账号资料（昵称、头像）由渠道方管理，如需更正请通过渠道的账号设置办理。</p>
+    <p><b>删除您的个人信息</b></p>
+    <p>您可以随时在设备系统设置中清除本游戏的应用数据，或在浏览器中清除相应站点数据，以删除全部本地存档。<b>本地清除不会自动删除云端存档</b>：如需删除云端存档，可在游戏内「设置 → 账号与云存档」退出登录后按本政策载明的方式联系我们，或通过渠道的账号与客服渠道申请删除。此外，在以下情形中，您也可以按本政策载明的方式向我们提出删除请求：</p>
+    <ul>
+      <li>我们违反法律、行政法规或与您的约定收集、使用个人信息；</li>
+      <li>我们违反法律、行政法规或与您的约定与第三方共享或转让您的个人信息，我们将立即停止该行为并通知第三方及时删除；</li>
+      <li>我们违反法律、行政法规或与您的约定公开披露您的个人信息，我们将立即停止披露并发布通知要求相关接收方删除；</li>
+      <li>您不再使用我们的产品或服务，或我们终止服务及运营。</li>
+    </ul>
+    <p><b>改变授权范围与撤回同意</b></p>
+    <p>您可以通过设备权限设置（如关闭「网络」「网络状态」或「安装未知应用」）或本政策载明的方式与我们联系，以改变同意范围或撤回授权；也可在游戏内「设置 → 隐私政策」中选择撤回同意并重新提交您的选择。撤回同意后，我们将不再初始化相关 SDK、不再展示广告，并停用登录与云存档等在线能力，但您仍可离线游玩；<b>撤回不影响此前基于您的授权已开展的个人信息处理</b>。您也可以在重新启动游戏时于隐私政策弹窗中选择「拒绝」。</p>
+    <p><b>注销账户</b></p>
+    <p>《股市风云录》不设置自有用户账号，账号由您所用渠道提供。如需注销账号，请通过相应渠道的账号设置或客服渠道办理；注销前请先在游戏内「设置 → 账号与云存档」退出登录。如您希望删除与您相关的全部游戏数据，本地数据请按上文方式清除应用数据，云端存档请按上文「删除」一节处理；删除后相关游戏进度将无法恢复。</p>
+    <p><b>响应您的请求</b></p>
+    <p>如您无法通过上述方式行使权利，可按本政策载明的联系方式与我们联系。为保障安全，我们可能需要先验证您的身份。对于合理请求，我们原则上不收取费用；对多次重复、超出合理限度的请求，我们可能视情收取一定成本费用，或对无端重复、需要过多技术手段、给他人合法权益带来风险及不切实际的请求予以拒绝。</p>
+    <p><b>响应情形的例外</b></p>
+    <ul>
+      <li>与我们履行法律法规规定的义务相关的；</li>
+      <li>与国家安全、国防安全直接相关的；</li>
+      <li>与公共安全、公共卫生、重大公共利益直接相关的；</li>
+      <li>与刑事侦查、起诉、审判和执行判决等直接相关的；</li>
+      <li>我们有充分证据表明个人信息主体存在主观恶意或滥用权利的；</li>
+      <li>出于维护个人信息主体或其他个人的生命、财产等重大合法权益但又很难得到本人同意的；</li>
+      <li>响应请求将导致个人信息主体或其他个人、组织的合法权益受到严重损害的；</li>
+      <li>涉及商业秘密的。</li>
+    </ul>
+
+    <h3 class="s" id="s8">八、我们如何处理未成年人的个人信息</h3>
+    <p>我们非常重视未成年人个人信息的保护。根据相关法律法规，收集、使用未满 14 周岁的未成年人个人信息，需由监护人授权同意；收集、使用已满 14 周岁未满 18 周岁的未成年人个人信息，可由监护人授权同意或本人自行授权同意。</p>
+    <p>如您为未成年人（尤其是不满 14 周岁），请您的父母或其他监护人仔细阅读本政策，并在取得监护人授权同意后使用我们的服务或向我们提供信息。我们将依据实名认证结果与防沉迷要求，对未成年人的游戏时段与时长进行限制。</p>
+    <p>如您是未成年人的监护人，请关注被监护人是否在您授权同意后使用我们的产品或服务。如对其个人信息有疑问，可通过本政策载明的方式与我们联系。</p>
+
+    <h3 class="s" id="s9">九、本隐私政策如何更新</h3>
+    <p>我们可能适时变更本政策，并在本页面发布更新后的版本。对于重大变更，我们会提供更为显著的通知（例如在游戏内或页面显著位置提示变更要点）。未经您明确同意，我们不会削减您依据本政策所应享有的权利。</p>
+    <p>本政策所指重大变更包括但不限于：服务模式发生重大变化；个人信息共享、转让或公开披露的主要对象发生变化；您参与个人信息处理方面的权利及行使方式发生重大变化；联系方式与投诉渠道发生变化；个人信息安全影响评估表明存在高风险。</p>
+    <p>我们会对本政策的历史版本存档，供您查阅。</p>
+
+    <h3 class="s" id="s10">十、如何联系我们</h3>
+    <p>如您对本政策或个人信息保护有任何疑问、意见或建议，可通过下述方式联系我们：</p>
+    <p>名称：<b>落饼枫林工作室</b></p>
+    <p>联系方式：通过您获取本游戏的商店页面所公示的开发者联系方式与我们联系，或在游戏内问题反馈入口提交。</p>
+    <p>我们将在收到请求并验证身份后十五个工作日内回复。如您对我们的回复不满意，特别是认为我们的个人信息处理行为损害了您的合法权益，您还可以向网信、电信、公安及市场监管等监管部门投诉或举报，或向有管辖权的人民法院提起诉讼。</p>
+  </article>
+
+  <footer class="foot">落饼枫林工作室 ·《股市风云录》（CAPITAL SAGA）· 本页为对外公示版本<br>更新日期 2026 年 11 月 14 日　生效日期 2026 年 11 月 14 日</footer>
+</div>
+
+</body>
+</html>
